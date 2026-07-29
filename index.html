@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trimble Training Services — SEA Training Portal</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --navy-14:      #003054;
+    --blue-11:      #004F83;
+    --blue:         #0063A3;
+    --blue-7:       #368FC7;
+    --ink:          #252A2E;
+    --grey-8:       #464B52;
+    --grey-6:       #6A6E79;
+    --grey-4:       #90939F;
+    --line:         #CBCDD6;
+    --amber:        #FBAD26;
+    --page-bg:      #F4F6F8;
+    --card-bg:      #FFFFFF;
+    --radius:       10px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--page-bg);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, Segoe UI, Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.55;
+  }
+  h1, h2, h3, h4 { font-family: 'Manrope', sans-serif; margin: 0; }
+  a { color: var(--blue); }
+  img, svg { display: block; }
+
+  .mono {
+    font-family: 'IBM Plex Mono', monospace;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  .portal-header {
+    position: relative;
+    background-color: var(--navy-14);
+    /* Set to look for cover.png in the exact same local folder / GitHub repo */
+    background-image: linear-gradient(180deg, rgba(0, 36, 66, 0.82) 0%, rgba(0, 30, 52, 0.92) 100%), url('cover.png');
+    background-size: cover;
+    background-position: center right;
+    color: #fff;
+    padding: 40px 32px 44px;
+    overflow: hidden;
+  }
+  .header-inner {
+    position: relative;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+  .header-top-row {
+    margin-bottom: 22px;
+  }
+  .trimble-logo-img {
+    height: 44px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+  }
+  .header-kicker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: #9FC6E4;
+    margin-bottom: 14px;
+  }
+  .header-kicker .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--amber);
+  }
+  h1.portal-title {
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    max-width: 640px;
+  }
+  .portal-sub {
+    margin-top: 14px;
+    max-width: 620px;
+    color: #D6E4EE;
+    font-size: 15.5px;
+  }
+
+  .tab-bar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: #fff;
+    border-bottom: 1px solid var(--line);
+    padding: 0 32px;
+  }
+  .tab-bar-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding: 14px 0;
+    scrollbar-width: thin;
+  }
+  .tab-btn {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11.5px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding: 9px 16px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: #fff;
+    color: var(--grey-8);
+    cursor: pointer;
+    transition: all .15s ease;
+  }
+  .tab-btn:hover { border-color: var(--blue-7); color: var(--blue); }
+  .tab-btn.active {
+    background: var(--navy-14);
+    border-color: var(--navy-14);
+    color: #fff;
+  }
+  .tab-btn .count {
+    color: var(--grey-4);
+    margin-left: 6px;
+  }
+  .tab-btn.active .count { color: #9FC6E4; }
+
+  main {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 34px 32px 80px;
+  }
+  .category-heading {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 34px 0 14px;
+  }
+  .category-heading:first-child { margin-top: 0; }
+  .category-heading h2 {
+    font-size: 20px;
+    font-weight: 700;
+  }
+  .category-heading .cat-note {
+    font-size: 12.5px;
+    color: var(--grey-6);
+  }
+
+  .course-card {
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    margin-bottom: 14px;
+    overflow: hidden;
+    transition: box-shadow .15s ease, border-color .15s ease;
+  }
+  .course-card.open {
+    border-color: var(--blue-7);
+    box-shadow: 0 6px 24px rgba(0,48,84,.08);
+  }
+  .course-card.featured { border-left: 3px solid var(--amber); }
+
+  .course-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 22px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .chevron {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .2s ease, background .2s ease, border-color .2s ease;
+  }
+  .course-card.open .chevron {
+    transform: rotate(45deg);
+    background: var(--blue);
+    border-color: var(--blue);
+  }
+  .chevron svg { stroke: var(--grey-8); transition: stroke .2s ease; }
+  .course-card.open .chevron svg { stroke: #fff; }
+
+  .course-head-main { flex: 1; min-width: 0; }
+  .course-eyebrow {
+    font-size: 11px;
+    color: var(--blue);
+    margin-bottom: 4px;
+  }
+  .course-title {
+    font-size: 16.5px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .placeholder-tag {
+    display: inline-block;
+    margin-left: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--grey-6);
+    background: #EEF1F3;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 2px 6px;
+    vertical-align: middle;
+  }
+
+  .badge-row {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--navy-14);
+    background: #EAF2F8;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 5px 9px;
+    white-space: nowrap;
+  }
+  @media (max-width: 680px) {
+    .badge-row { display: none; }
+  }
+
+  .course-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease;
+  }
+  .course-body-inner {
+    padding: 0 22px 26px;
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+  }
+
+  .body-badges-mobile {
+    display: none;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  @media (max-width: 680px) {
+    .body-badges-mobile { display: flex; }
+  }
+
+  .lede {
+    font-size: 14.5px;
+    color: var(--grey-8);
+    max-width: 720px;
+    margin-bottom: 18px;
+  }
+  .contact-note {
+    font-size: 13.5px;
+    background: #F7F9FA;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--amber);
+    border-radius: 6px;
+    padding: 12px 14px;
+    margin-bottom: 22px;
+    color: var(--grey-8);
+  }
+  .contact-note a { font-weight: 600; }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 26px;
+    margin-bottom: 22px;
+  }
+  @media (max-width: 680px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+  .block h4 {
+    font-size: 12px;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-bottom: 10px;
+  }
+  .block ul {
+    margin: 0; padding-left: 18px;
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .block ul li { margin-bottom: 7px; }
+  .block ul li::marker { color: var(--blue-7); }
+
+  .spec-strip {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 22px;
+  }
+  .spec-cell {
+    background: #fff;
+    padding: 12px 14px;
+  }
+  .spec-cell .k {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--grey-6);
+    margin-bottom: 4px;
+  }
+  .spec-cell .v { font-size: 14px; font-weight: 600; color: var(--ink); }
+  @media (max-width: 520px) {
+    .spec-strip { grid-template-columns: 1fr 1fr; }
+  }
+
+  .assess-box {
+    background: #F7F9FA;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 22px;
+  }
+  .assess-box h4 {
+    font-size: 12px;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin-bottom: 10px;
+  }
+  .assess-box p { font-size: 13.5px; color: var(--grey-8); margin: 0 0 12px; }
+  .grade-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+  .grade-pill {
+    font-size: 12.5px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-weight: 600;
+  }
+  .grade-pill.pass { background: #E4F3E9; color: #1E7A44; }
+  .grade-pill.fail { background: #FBE9E7; color: #B23B2E; }
+
+  .placeholder-body {
+    font-size: 14px;
+    color: var(--grey-6);
+    background: #F7F9FA;
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+  }
+
+  .cta-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+    padding-top: 6px;
+    border-top: 1px solid var(--line);
+    margin-top: 4px;
+  }
+  .register-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--amber);
+    color: var(--navy-14);
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    padding: 11px 20px;
+    border-radius: 7px;
+    border: none;
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .register-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(251,173,38,.35);
+  }
+  .cta-hint { font-size: 12.5px; color: var(--grey-6); }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 30, 52, 0.65);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .modal-container {
+    background: #ffffff;
+    width: 100%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 12px;
+    padding: 32px;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    transform: translateY(20px);
+    transition: transform 0.25s ease;
+  }
+  .modal-overlay.active .modal-container {
+    transform: translateY(0);
+  }
+  .modal-close {
+    position: absolute;
+    top: 18px; right: 20px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: var(--grey-6);
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .modal-close:hover { background: #f0f2f5; color: var(--ink); }
+  .modal-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--navy-14);
+    margin-bottom: 6px;
+  }
+  .modal-sub {
+    font-size: 13.5px;
+    color: var(--grey-6);
+    margin-bottom: 22px;
+  }
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 580px) {
+    .form-grid { grid-template-columns: 1fr; }
+  }
+  .form-group {
+    margin-bottom: 16px;
+  }
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--grey-8);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .form-control {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 14px;
+    font-family: inherit;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: #fff;
+    color: var(--ink);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .form-control:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(0, 99, 163, 0.15);
+  }
+  .readonly-field {
+    background: #F4F6F8;
+    font-weight: 600;
+    color: var(--navy-14);
+  }
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+  }
+  .btn-primary {
+    background: var(--amber);
+    color: var(--navy-14);
+    font-weight: 700;
+    border: none;
+    padding: 11px 22px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.15s ease;
+  }
+  .btn-primary:hover:not(:disabled) {
+    background: #f2a31b;
+    transform: translateY(-1px);
+  }
+  .btn-primary:disabled {
+    background: #e2e6ea;
+    color: var(--grey-6);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  .btn-secondary {
+    background: #EEF1F3;
+    color: var(--grey-8);
+    font-weight: 600;
+    border: 1px solid var(--line);
+    padding: 11px 18px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  .btn-secondary:hover { background: #e2e6ea; }
+  .success-icon {
+    width: 56px; height: 56px;
+    background: #E4F3E9;
+    color: #1E7A44;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
+
+  footer {
+    background: var(--navy-14);
+    color: #B9CEDC;
+    padding: 30px 32px;
+  }
+  .footer-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+    font-size: 12.5px;
+  }
+  .footer-inner a { color: #B9CEDC; }
+
+  .no-results {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--grey-6);
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+
+<header class="portal-header">
+  <div class="header-inner">
+    <div class="header-top-row">
+      <!-- Set to look for the image in the exact same local folder / GitHub repo -->
+      <img src="TrimbleR-Logo-Boxed-Blue10-RGB.png" alt="Trimble Logo" class="trimble-logo-img" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Trimble_logo.svg/320px-Trimble_logo.svg.png';">
+    </div>
+    <div class="header-kicker">
+      <span class="mono">Trimble Training Services</span>
+      <span class="dot"></span>
+      <span class="mono">Southeast Asia</span>
+    </div>
+    <h1 class="portal-title">SEA Training Portal</h1>
+    <p class="portal-sub">Instructor-led courses covering Tekla Structures, Tekla Structural Designer, Tekla Tedds, and CORENET X readiness — for teams working across Southeast Asia. Select a course below to view the full syllabus and register your interest.</p>
+  </div>
+</header>
+
+<nav class="tab-bar">
+  <div class="tab-bar-inner" id="tabBar"></div>
+</nav>
+
+<main id="courseList"></main>
+
+<div class="modal-overlay" id="regModal">
+  <div class="modal-container">
+    <button class="modal-close" onclick="closeModal()">×</button>
+    
+    <!-- View 1: The Form -->
+    <div id="modalFormView">
+      <h3 class="modal-title">Register Interest</h3>
+      <p class="modal-sub">Complete the form below and the Trimble SEA Training team will get back to you with schedule details and pricing.</p>
+      
+      <form onsubmit="handleModalSubmit(event)">
+        <div class="form-group">
+          <label class="form-label" for="m_course">Selected Course</label>
+          <input type="text" id="m_course" class="form-control readonly-field" readonly required>
+        </div>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="m_name">Full Name *</label>
+            <input type="text" id="m_name" class="form-control" placeholder="e.g. John Doe" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="m_email">Work Email *</label>
+            <input type="email" id="m_email" class="form-control" placeholder="name@company.com" required>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="m_job">Designation / Job Title *</label>
+            <input type="text" id="m_job" class="form-control" placeholder="e.g. Structural Engineer" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="m_phone">Contact Number *</label>
+            <input type="tel" id="m_phone" class="form-control" placeholder="+65 9123 4567" required>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="m_company">Company / Organization *</label>
+            <input type="text" id="m_company" class="form-control" placeholder="Company Name Pte Ltd" required>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label" for="m_country">Country / Region *</label>
+            <select id="m_country" class="form-control" required>
+              <option value="">Select country...</option>
+              <option value="Singapore">Singapore</option>
+              <option value="Malaysia">Malaysia</option>
+              <option value="Indonesia">Indonesia</option>
+              <option value="Thailand">Thailand</option>
+              <option value="Vietnam">Vietnam</option>
+              <option value="Philippines">Philippines</option>
+              <option value="Other SEA">Other Southeast Asia</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn-primary" id="submitBtn">Submit Registration</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- View 2: Success Message -->
+    <div id="modalSuccessView" style="display:none; text-align:center; padding: 20px 10px;">
+      <div class="success-icon">✓</div>
+      <h3 class="modal-title" style="margin-bottom:10px;">Thank You!</h3>
+      <p class="modal-sub" style="margin-bottom:24px;">Your interest has been successfully registered. The Trimble Training Services SEA team will contact you shortly.</p>
+      <button class="btn-primary" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span>© 2026 Trimble Solutions SEA Pte Ltd. All rights reserved.</span>
+    <span>Questions? <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a></span>
+  </div>
+</footer>
+
+<script>
+// ============================================================================
+// HOW TO SET UP GOOGLE FORMS SILENT SUBMISSION
+// 1. Put your formResponse URL below.
+// 2. Put the entry.XXXXXXX numbers for each field below.
+// ============================================================================
+const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLScLxUO8ZSzjfy2bSq8wP_2pwI3bMn1u7YQjqM--lrQnrgRfuA/formResponse";
+const GOOGLE_FORM_ENTRIES = {
+  courseName: "entry.219748357",
+  fullName:   "entry.101865801",
+  workEmail:  "entry.308202373",
+  jobTitle:   "entry.411940626",
+  phoneNum:   "entry.1345572775",
+  company:    "entry.494374067",
+  country:    "entry.191469004"
+};
+
+// ============================================================================
+// DATA SETTINGS
+// ============================================================================
+const CATEGORIES = [
+  { id:'all',                       label:'All Courses' },
+  { id:'corenet-x',                 label:'CORENET X Readiness' },
+  { id:'tekla-structures',          label:'Tekla Structures' },
+  { id:'tekla-structural-designer', label:'Tekla Structural Designer' },
+  { id:'tekla-tedds',               label:'Tekla Tedds' },
+];
+
+const COURSES = [
+  {
+    id:'corenet-x-ifc-sg',
+    category:'corenet-x',
+    featured:true,
+    title:'Tekla IFC+SG Workflow Training for CORENET X Readiness',
+    eyebrow:'CORENET X Readiness',
+    skillLevel:'Fundamental',
+    duration:'2 Days',
+    method:'Classroom',
+    lede:'This instructor-led course is open to Tekla users in Singapore only, and is conducted in English. Over 2 days, learners build the essential skills to use Tekla Structures across structural BIM modeling, learn the fundamental working methods of Trimble products and Tekla IFC+SG plugins, and become familiar with the Tekla IFC+SG workflow needed to prepare a CORENET X submission.',
+    contactNote:'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+    topics:[
+      'The Tekla ecosystem for CORENET X',
+      'The <a href="https://support.tekla.com/corenet-x-ifc-sg" target="_blank" rel="noopener">Tekla IFC+SG Resource Centre</a> in Tekla User Assistance (TUA)',
+      'Working with the BIM tool Tekla Structures',
+      'Design-to-BIM workflows using Tekla IFC+SG plugins',
+      'Preparing IFC+SG models for CORENET X submission'
+    ],
+    outcomes:[
+      'Understand the Tekla ecosystem for CORENET X',
+      'Navigate and use the IFC+SG resources available in Tekla User Assistance (TUA)',
+      'Work effectively with the BIM tool Tekla Structures',
+      'Perform interoperability between the A&D model and the BIM model',
+      'Apply the automated process of transferring structural design data to the BIM model using Tekla IFC+SG plugins',
+      'Generate IFC+SG-compliant BIM model data',
+      'Open the IFC+SG model in a universal IFC viewer (Trimble Connect) with integrated IFC+SG data',
+      'Use Trimble Connect Model Explorer to review and manage imported IFC+SG data',
+      'Use Trimble Connect Model Checker to validate and update imported IFC+SG data',
+      'Use Trimble Connect to communicate and manage model changes'
+    ],
+    assessment:{
+      intro:'To complete the course and earn the digital certificate, learners must pass a summative assessment with a minimum score of 75%, demonstrating the required level of proficiency.',
+      detail:'The assessment is conducted online and consists of questions designed to evaluate the learner\'s understanding of key concepts, tools, and best practices covered in the training.',
+      bullets:[
+        'Theory — multiple-choice questions covering core topics relevant to the training module',
+        'Attempts allowed — learners may attempt the assessment up to three times to achieve a passing score'
+      ]
+    }
+  },
+
+  /* ---- Tekla Structures — placeholders ---- */
+  { id:'ts-precast-fundamental', category:'tekla-structures', placeholder:true,
+    title:'Tekla Structures — Precast Fundamental Training', eyebrow:'Tekla Structures',
+    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
+  { id:'ts-steel-concrete-fundamental', category:'tekla-structures', placeholder:true,
+    title:'Tekla Structures — Steel & Concrete Fundamental Training', eyebrow:'Tekla Structures',
+    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
+  { id:'ts-steel-fundamental', category:'tekla-structures', placeholder:true,
+    title:'Tekla Structures — Steel Fundamental Training', eyebrow:'Tekla Structures',
+    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
+  { id:'ts-bridge-creator', category:'tekla-structures', placeholder:true,
+    title:'Tekla Structures — Fundamental Bridge Creator Training', eyebrow:'Tekla Structures',
+    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
+  { id:'ts-steel-advanced-offshore', category:'tekla-structures', placeholder:true,
+    title:'Tekla Structures — Steel Advanced, Offshore Training', eyebrow:'Tekla Structures',
+    skillLevel:'Advanced', duration:'TBD', method:'TBD' },
+  { id:'ts-steel-fundamental-offshore', category:'tekla-structures', placeholder:true,
+    title:'Tekla Structures — Steel Fundamental, Offshore Training', eyebrow:'Tekla Structures',
+    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
+  { id:'ts-advanced', category:'tekla-structures', placeholder:true,
+    title:'Tekla Structures — Advanced Training', eyebrow:'Tekla Structures',
+    skillLevel:'Advanced', duration:'TBD', method:'TBD' },
+
+  /* ---- Tekla Structural Designer — placeholders ---- */
+  { id:'tsd-fundamental', category:'tekla-structural-designer', placeholder:true,
+    title:'Tekla Structural Designer — Fundamental Training', eyebrow:'Tekla Structural Designer',
+    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
+  { id:'tsd-intermediate', category:'tekla-structural-designer', placeholder:true,
+    title:'Tekla Structural Designer — Intermediate Training', eyebrow:'Tekla Structural Designer',
+    skillLevel:'Intermediate', duration:'TBD', method:'TBD' },
+  { id:'tsd-advanced', category:'tekla-structural-designer', placeholder:true,
+    title:'Tekla Structural Designer — Advanced Training', eyebrow:'Tekla Structural Designer',
+    skillLevel:'Advanced', duration:'TBD', method:'TBD' },
+  { id:'tsd-precast', category:'tekla-structural-designer', placeholder:true,
+    title:'Tekla Structural Designer — Precast Structure Design Training', eyebrow:'Tekla Structural Designer',
+    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
+
+  /* ---- Tekla Tedds — placeholder ---- */
+  { id:'tedds-fundamental', category:'tekla-tedds', placeholder:true,
+    title:'Tekla Tedds — Fundamental Training', eyebrow:'Tekla Tedds',
+    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
+];
+
+function openModal(courseTitle) {
+  const modal = document.getElementById('regModal');
+  const courseInput = document.getElementById('m_course');
+  
+  if (courseInput) courseInput.value = courseTitle;
+  
+  // Reset views just in case
+  const formView = document.getElementById('modalFormView');
+  const successView = document.getElementById('modalSuccessView');
+  if (formView) formView.style.display = 'block';
+  if (successView) successView.style.display = 'none';
+  
+  // Show modal
+  if (modal) modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const modal = document.getElementById('regModal');
+  if (modal) modal.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function handleModalSubmit(event) {
+  event.preventDefault(); // Prevent standard page reload
+  
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.innerText = 'Submitting...'; // Provide UI feedback
+  submitBtn.disabled = true;
+  
+  // Gather data
+  const course   = document.getElementById('m_course').value;
+  const fullName = document.getElementById('m_name').value;
+  const workEmail= document.getElementById('m_email').value;
+  const jobTitle = document.getElementById('m_job').value;
+  const phoneNum = document.getElementById('m_phone').value;
+  const company  = document.getElementById('m_company').value;
+  const country  = document.getElementById('m_country').value;
+
+  function showSuccess() {
+    document.getElementById('modalFormView').style.display = 'none';
+    document.getElementById('modalSuccessView').style.display = 'block';
+    submitBtn.innerText = 'Submit Registration';
+    submitBtn.disabled = false;
+    event.target.reset(); // clear form inputs for next time
+  }
+
+  if (GOOGLE_FORM_ACTION_URL && GOOGLE_FORM_ACTION_URL.indexOf("YOUR_FORM_ID") === -1) {
+    try {
+      const formData = new FormData();
+      if (GOOGLE_FORM_ENTRIES.courseName) formData.append(GOOGLE_FORM_ENTRIES.courseName, course);
+      if (GOOGLE_FORM_ENTRIES.fullName)   formData.append(GOOGLE_FORM_ENTRIES.fullName, fullName);
+      if (GOOGLE_FORM_ENTRIES.workEmail)  formData.append(GOOGLE_FORM_ENTRIES.workEmail, workEmail);
+      if (GOOGLE_FORM_ENTRIES.jobTitle)   formData.append(GOOGLE_FORM_ENTRIES.jobTitle, jobTitle);
+      if (GOOGLE_FORM_ENTRIES.phoneNum)   formData.append(GOOGLE_FORM_ENTRIES.phoneNum, phoneNum);
+      if (GOOGLE_FORM_ENTRIES.company)    formData.append(GOOGLE_FORM_ENTRIES.company, company);
+      if (GOOGLE_FORM_ENTRIES.country)    formData.append(GOOGLE_FORM_ENTRIES.country, country);
+
+      // Perform background submission using standard Promises
+      if (window.fetch) {
+        fetch(GOOGLE_FORM_ACTION_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          body: formData
+        })
+        .then(function() {
+          showSuccess();
+        })
+        .catch(function(err) {
+          console.warn("Background submission error:", err);
+          showSuccess(); // Google blocks some readbacks but still accepts data, show success anyway.
+        });
+      } else {
+        showSuccess();
+      }
+    } catch (err) {
+      console.warn("Form construction error:", err);
+      showSuccess();
+    }
+  } else {
+    // If no real URL is set, just simulate a brief loading time for testing the UI
+    setTimeout(showSuccess, 800);
+  }
+}
+
+function badgeHTML(course){
+  return `
+    <span class="badge">${course.skillLevel || 'TBD'}</span>
+    <span class="badge">${course.duration || 'TBD'}</span>
+    <span class="badge">${course.method || 'TBD'}</span>
+  `;
+}
+
+function fullBodyHTML(c){
+  return `
+    <div class="body-badges-mobile">${badgeHTML(c)}</div>
+    <p class="lede">${c.lede || ''}</p>
+    ${c.contactNote ? `<div class="contact-note">${c.contactNote}</div>` : ''}
+
+    <div class="spec-strip">
+      <div class="spec-cell"><div class="k">Skill Level</div><div class="v">${c.skillLevel}</div></div>
+      <div class="spec-cell"><div class="k">Training Method</div><div class="v">${c.method}</div></div>
+      <div class="spec-cell"><div class="k">Duration</div><div class="v">${c.duration}</div></div>
+    </div>
+
+    <div class="two-col">
+      ${c.topics ? `<div class="block"><h4>Key Learning Topics</h4><ul>${c.topics.map(t=>`<li>${t}</li>`).join('')}</ul></div>` : ''}
+      ${c.outcomes ? `<div class="block"><h4>Learning Outcomes</h4><ul>${c.outcomes.map(t=>`<li>${t}</li>`).join('')}</ul></div>` : ''}
+    </div>
+
+    ${c.assessment ? `
+    <div class="assess-box">
+      <h4>Assessment &amp; Certification</h4>
+      <p>${c.assessment.intro}</p>
+      <p>${c.assessment.detail}</p>
+      <ul style="margin:0 0 4px;padding-left:18px;font-size:13.5px;color:var(--ink)">
+        ${c.assessment.bullets.map(b=>`<li style="margin-bottom:6px">${b}</li>`).join('')}
+      </ul>
+      <div class="grade-row">
+        <span class="grade-pill pass">≥ 75% — Pass, Certified</span>
+        <span class="grade-pill fail">&lt; 75% — Fail, Not Certified</span>
+      </div>
+    </div>` : ''}
+
+    <div class="cta-row">
+      <button type="button" class="register-btn" onclick="openModal('${c.title.replace(/'/g, "\\'")}')">Register interest →</button>
+      <span class="cta-hint">Opens a quick registration form — no commitment required.</span>
+    </div>
+  `;
+}
+
+function placeholderBodyHTML(c){
+  return `
+    <div class="body-badges-mobile">${badgeHTML(c)}</div>
+    <div class="placeholder-body">
+      Full syllabus details for this course are being finalised. In the meantime, register
+      your interest below and the SEA training team will follow up with dates and pricing.
+    </div>
+    <div class="cta-row">
+      <button type="button" class="register-btn" onclick="openModal('${c.title.replace(/'/g, "\\'")}')">Register interest →</button>
+      <span class="cta-hint">Opens a quick registration form — no commitment required.</span>
+    </div>
+  `;
+}
+
+function courseCardHTML(c){
+  return `
+    <div class="course-card${c.featured?' featured':''}" data-id="${c.id}" data-category="${c.category}">
+      <div class="course-head" onclick="toggleCard('${c.id}')">
+        <div class="chevron"><svg width="12" height="12" viewBox="0 0 12 12"><line x1="6" y1="0" x2="6" y2="12" stroke-width="1.6"/><line x1="0" y1="6" x2="12" y2="6" stroke-width="1.6"/></svg></div>
+        <div class="course-head-main">
+          <div class="course-eyebrow">${c.eyebrow}${c.placeholder ? '<span class="placeholder-tag">Details coming soon</span>' : ''}</div>
+          <div class="course-title">${c.title}</div>
+        </div>
+        <div class="badge-row">${badgeHTML(c)}</div>
+      </div>
+      <div class="course-body" id="body-${c.id}">
+        <div class="course-body-inner">
+          ${c.placeholder ? placeholderBodyHTML(c) : fullBodyHTML(c)}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function render(activeCategory){
+  const list = document.getElementById('courseList');
+  const groups = CATEGORIES.filter(cat => cat.id !== 'all');
+  let html = '';
+
+  groups.forEach(cat=>{
+    const items = COURSES.filter(c => c.category === cat.id);
+    if(!items.length) return;
+    if(activeCategory !== 'all' && activeCategory !== cat.id) return;
+
+    html += `<div class="category-heading"><h2>${cat.label}</h2><span class="cat-note">${items.length} course${items.length>1?'s':''}</span></div>`;
+    html += items.map(courseCardHTML).join('');
+  });
+
+  list.innerHTML = html || `<div class="no-results">No courses in this category yet.</div>`;
+}
+
+function toggleCard(id){
+  const card = document.querySelector(`.course-card[data-id="${id}"]`);
+  const body = document.getElementById(`body-${id}`);
+  const isOpen = card.classList.contains('open');
+
+  document.querySelectorAll('.course-card.open').forEach(el=>{
+    if(el !== card){
+      el.classList.remove('open');
+      el.querySelector('.course-body').style.maxHeight = null;
+    }
+  });
+
+  if(isOpen){
+    card.classList.remove('open');
+    body.style.maxHeight = null;
+  } else {
+    card.classList.add('open');
+    body.style.maxHeight = body.scrollHeight + 'px';
+    setTimeout(()=>{ card.scrollIntoView({behavior:'smooth', block:'nearest'}); }, 180);
+  }
+}
+
+function initTabs(){
+  const bar = document.getElementById('tabBar');
+  bar.innerHTML = CATEGORIES.map((cat,i)=>{
+    const count = cat.id === 'all' ? COURSES.length : COURSES.filter(c=>c.category===cat.id).length;
+    return `<button class="tab-btn${i===0?' active':''}" data-cat="${cat.id}" onclick="selectTab('${cat.id}', this)">${cat.label}<span class="count">${count}</span></button>`;
+  }).join('');
+  render('all');
+}
+
+function selectTab(catId, btn){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  render(catId);
+}
+
+// Start rendering
+initTabs();
+</script>
+
+</body>
+</html>
