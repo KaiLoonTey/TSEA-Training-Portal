@@ -917,10 +917,7 @@ function fullBodyHTML(c){
       <ul style="margin:0 0 4px;padding-left:18px;font-size:13.5px;color:var(--ink)">
         ${c.assessment.bullets.map(b=>`<li style="margin-bottom:6px">${b}</li>`).join('')}
       </ul>
-      <div class="grade-row">
-        <span class="grade-pill pass">≥ 75% — Pass, Certified</span>
-        <span class="grade-pill fail">&lt; 75% — Fail, Not Certified</span>
-      </div>
+      
     </div>` : ''}
 
     <div class="cta-row">
