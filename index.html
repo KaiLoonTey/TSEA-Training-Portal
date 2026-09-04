@@ -854,12 +854,63 @@ const COURSES = [
   { id:'ts-bridge-creator', category:'tekla-structures', placeholder:true,
     title:'Tekla Structures — Fundamental Bridge Creator Training', eyebrow:'Tekla Structures',
     skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
-  { id:'ts-steel-advanced-offshore', category:'tekla-structures', placeholder:true,
-    title:'Tekla Structures — Steel Advanced, Offshore Training', eyebrow:'Tekla Structures',
-    skillLevel:'Advanced', duration:'TBD', method:'TBD' },
-  { id:'ts-steel-fundamental-offshore', category:'tekla-structures', placeholder:true,
-    title:'Tekla Structures — Steel Fundamental, Offshore Training', eyebrow:'Tekla Structures',
-    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
+  {
+    id:'ts-steel-advanced-offshore',
+    category:'tekla-structures',
+    title:'Tekla Structures — Steel Advanced, Offshore Training',
+    eyebrow:'Tekla Structures',
+    skillLevel:'Advanced',
+    duration:'3 days',
+    method:'Online (via Zoom) or Classroom',
+    lede:'This instructor-led training course is open to Tekla Structures users based in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Offshore Advanced training is designed for experienced users who want to customize and optimize their Tekla Structures environment for maximum efficiency and productivity in offshore steel projects.<br><br>Learners will apply their skills in complex project settings, focusing on advanced modeling, detailing, and integration workflows relevant to offshore structures.',
+    contactNote:'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+    topics:[
+      'Customizing drawing templates and reports for company standards',
+      'Developing parametric custom components for complex offshore structures',
+      'Configuring model templates and managing company-specific settings',
+      'Tekla–E3D & S3D integration workflows'
+    ],
+    outcomes:[
+      'Customize drawing and reporting tools for project-specific requirements',
+      'Build parametric components to automate repetitive modeling tasks',
+      'Configure and standardize project environments using model templates',
+      'Integrate Tekla Structures with E3D and S3D for efficient offshore workflows'
+    ],
+    agenda:[
+      '<strong>Day 1: Drawing Template & Custom Attributes</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Customizing drawing title blocks and revision templates</li><li>Customizing drawing material report templates</li><li>Integrating title blocks and material reports into drawing layouts</li><li>Creating and customizing report templates</li><li>Defining and creating custom user defined attributes (UDA)</li></ul>',
+      '<strong>Day 2: Parametric Custom Components</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Creating custom parts</li><li>Developing custom details</li><li>Creation of custom connections with predefined rules</li><li>Modifying the dialog boxes of custom components</li><li>Configuring auto connection rules</li></ul>',
+      '<strong>Day 3: Tekla-E3D & S3D Integration</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Install the required extensions to enable interoperability between Tekla Structures and E3D/PDMS/S3D</li><li>Export data from E3D/PDMS</li><li>Optimize import process</li><li>Map profiles and materials</li><li>Assign UDAs to new Tekla parts to customize the integration</li><li>Import and export to S3D</li></ul>'
+    ],
+    prerequisite: 'Fundamental skills in Tekla Structures'
+  },
+  {
+    id:'ts-steel-fundamental-offshore',
+    category:'tekla-structures',
+    title:'Tekla Structures — Steel Fundamental, Offshore Training',
+    eyebrow:'Tekla Structures',
+    skillLevel:'Fundamental',
+    duration:'4 days',
+    method:'Online (via Zoom) or Classroom',
+    lede:'This instructor-led Tekla Structures Offshore Fundamental Training is open to Tekla Structures users in Malaysia and Singapore only. Conducted in English, this specialized 4-day training course focuses on equipping learners with the knowledge and skills to effectively utilize Tekla Structures for modeling and detailing offshore steel structures.<br><br>This course emphasizes practical application through hands-on software usage, interactive knowledge sharing, audio-video materials, and engaging skill practice exercises to enhance the learning experience. This training equips learners with the key functionalities of Tekla Structures in handling actual offshore projects.',
+    contactNote:'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+    topics:[
+      '3D structure fundamentals',
+      'Connections and detailings',
+      'Drawings and Reports'
+    ],
+    outcomes:[
+      'Understand and apply the basic working methods in Tekla Structures',
+      'Model offshore steel structures effectively',
+      'Add appropriate connections and detailing to model components',
+      'Generate layout and production drawings',
+      'Produce detailed reports from 3D offshore models'
+    ],
+    agenda:[
+      '<strong>Day 1: 3D Structure Fundamentals</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Get acquainted with the Tekla Structures interface, basic tools, and navigation techniques for efficient modeling of offshore steel structures.</li><li>Learn how to customize the workspace and work plane to optimize the modeling process for steel offshore structures</li><li>Understand the process of importing and managing reference files.</li><li>Creating and modifying offshore steel parts</li></ul>',
+      '<strong>Day 2 &amp; 3: Connections &amp; Detailing</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Explore various methods for cutting and modifying steel objects to achieve complex shapes and connections typical in offshore structures</li><li>Learn how to add and detail connections, including welds and bolts.</li><li>Understand how to manage assemblies and utilize the batch editor for efficient modification</li><li>Utilizing system components and extensions</li><li>Develop skills in creating custom components to address specific project needs and design requirements</li></ul>',
+      '<strong>Day 4: Drawings &amp; Report</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Creating professional general arrangement drawings to industry standards</li><li>Develop skills in modifying and enhancing drawings to meet specific presentation and documentation standards</li><li>Master the procedures for printing and exporting drawings in various formats for collaboration and sharing</li><li>Learn to extract and compile relevant data from the steel offshore model to generate reports for material take-off</li></ul>'
+    ]
+  },
   {
     id:'ts-advanced',
     category:'tekla-structures',
