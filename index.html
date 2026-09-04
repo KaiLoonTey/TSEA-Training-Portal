@@ -860,9 +860,42 @@ const COURSES = [
   { id:'ts-steel-fundamental-offshore', category:'tekla-structures', placeholder:true,
     title:'Tekla Structures — Steel Fundamental, Offshore Training', eyebrow:'Tekla Structures',
     skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
-  { id:'ts-advanced', category:'tekla-structures', placeholder:true,
-    title:'Tekla Structures — Advanced Training', eyebrow:'Tekla Structures',
-    skillLevel:'Advanced', duration:'TBD', method:'TBD' },
+  {
+    id:'ts-advanced',
+    category:'tekla-structures',
+    title:'Tekla Structures — Advanced Training',
+    eyebrow:'Tekla Structures',
+    skillLevel:'Advanced',
+    duration:'3 days',
+    method:'Online (via Zoom) or Classroom',
+    lede:'This instructor-led, BIM-based training is open exclusively to Tekla Structures users in Malaysia and Singapore. Conducted in English, the Tekla Structures Advanced Training is designed for experienced users who want to master advanced techniques for modifying default settings to suit specific project requirements.<br><br>This training equips learners with advanced skills to customize Tekla Structures and optimize project workflows.',
+    contactNote:'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+    topics:[
+      'Setting up company- and project-specific requirements',
+      'Adding custom connection libraries and profiles',
+      'Creating additional reports and drawing templates',
+      'Modifying drawing layouts and property settings'
+    ],
+    outcomes:[
+      'Configure Tekla Structures to meet company and project-specific standards',
+      'Implement custom connection libraries and profiles for advanced modeling',
+      'Create tailored reports and drawing templates',
+      'Adjust drawing layouts and properties to align with project needs'
+    ],
+    agenda:[
+      '<strong>Day 1: Parametric Custom Components</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Creating custom parts</li><li>Developing custom details</li><li>Creation of custom connections with predefined rules</li><li>Modifying the dialog boxes of custom components</li><li>Configuring auto connection rules</li></ul>',
+      '<strong>Day 2: Data & System Customization</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Defining and creating custom user defined attributes (UDA)</li><li>Manage model using phase manager</li><li>Utilizing organizer tool</li><li>Creation of custom profile</li></ul>',
+      '<strong>Day 3: Model Template & Administration</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Customizing drawing title blocks and revision templates</li><li>Customizing drawing material report templates</li><li>Integrating title blocks and material reports into drawing layouts</li><li>Setting up drawing object level properties</li><li>Customizing model templates</li><li>Managing company-specific settings by firm folder</li></ul>'
+    ],
+    assessment:{
+      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+      bullets:[
+        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+      ]
+    },
+    prerequisite: 'Fundamental skills in Tekla Structures'
+  },
 
   /* ---- Tekla Structural Designer — placeholders ---- */
   { id:'tsd-fundamental', category:'tekla-structural-designer', placeholder:true,
@@ -976,6 +1009,7 @@ function fullBodyHTML(c){
       <div class="spec-cell"><div class="k">Skill Level</div><div class="v">${c.skillLevel}</div></div>
       <div class="spec-cell"><div class="k">Training Method</div><div class="v">${c.method}</div></div>
       <div class="spec-cell"><div class="k">Duration</div><div class="v">${c.duration}</div></div>
+      ${c.prerequisite ? `<div class="spec-cell" style="grid-column: 1 / -1;"><div class="k">Pre-requisite</div><div class="v">${c.prerequisite}</div></div>` : ''}
     </div>
 
     <div class="two-col">
