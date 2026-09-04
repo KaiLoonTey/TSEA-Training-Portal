@@ -351,16 +351,7 @@
     margin-bottom: 10px;
   }
   .assess-box p { font-size: 13.5px; color: var(--grey-8); margin: 0 0 12px; }
-  .grade-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
-  .grade-pill {
-    font-size: 12.5px;
-    padding: 6px 12px;
-    border-radius: 999px;
-    font-weight: 600;
-  }
-  .grade-pill.pass { background: #E4F3E9; color: #1E7A44; }
-  .grade-pill.fail { background: #FBE9E7; color: #B23B2E; }
-
+  
   .placeholder-body {
     font-size: 14px;
     color: var(--grey-6);
@@ -584,7 +575,6 @@
 <header class="portal-header">
   <div class="header-inner">
     <div class="header-top-row">
-      <!-- Set to look for the image in the exact same local folder / GitHub repo -->
       <img src="TrimbleR-Logo-Boxed-Blue10-RGB.png" alt="Trimble Logo" class="trimble-logo-img" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Trimble_logo.svg/320px-Trimble_logo.svg.png';">
     </div>
     <div class="header-kicker">
@@ -688,11 +678,6 @@
 </footer>
 
 <script>
-// ============================================================================
-// HOW TO SET UP GOOGLE FORMS SILENT SUBMISSION
-// 1. Put your formResponse URL below.
-// 2. Put the entry.XXXXXXX numbers for each field below.
-// ============================================================================
 const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLScLxUO8ZSzjfy2bSq8wP_2pwI3bMn1u7YQjqM--lrQnrgRfuA/formResponse";
 const GOOGLE_FORM_ENTRIES = {
   courseName: "entry.219748357",
@@ -704,9 +689,6 @@ const GOOGLE_FORM_ENTRIES = {
   country:    "entry.191469004"
 };
 
-// ============================================================================
-// DATA SETTINGS
-// ============================================================================
 const CATEGORIES = [
   { id:'all',                       label:'All Courses' },
   { id:'corenet-x',                 label:'CORENET X Readiness' },
@@ -755,17 +737,120 @@ const COURSES = [
       ]
     }
   },
+  { 
+    id:'ts-precast-fundamental', 
+    category:'tekla-structures',
+    title:'Tekla Structures — Precast Fundamental Training', 
+    eyebrow:'Tekla Structures',
+    skillLevel:'Fundamental', 
+    duration:'3 days', 
+    method:'Online (via Zoom) or Classroom',
+    lede:'This instructor-led training course is open to Tekla Structures users based in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Precast Fundamental training course introduces learners to the core functionalities of Tekla Structures for precast projects, focusing on real-world workflows for structural modelling, precast detailing, drawing generation, and reporting.<br><br>Learners will gain hands-on experience using Tekla Structures to model, detail, and document precast concrete structures efficiently.',
+    contactNote:'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+    topics:[
+      'Introduction to Tekla Structures Precast – Overview of the software and its benefits for precast projects.',
+      'Part Creation and Modification – Creating precast elements and adjusting their properties.',
+      'Reinforcement and Detailing – Adding reinforcement, openings, and other details to precast parts.',
+      'Drawing Generation – Producing accurate 2D shop drawings from the 3D precast model.',
+      'Report Creation – Generating reports for fabrication and production planning.'
+    ],
+    outcomes:[
+      'Understand and apply the basic workflows of Tekla Structures for precast projects.',
+      'Create and modify precast elements efficiently.',
+      'Add reinforcement and details accurately to precast parts.',
+      'Generate shop drawings and reports from the 3D precast model.',
+      'Apply Tekla Structures skills to manage real-world precast projects effectively.'
+    ],
+    agenda:[
+      '<strong>Day 1: 3D Structure Fundamentals</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Get acquainted with the Tekla Structures interface, basic tools, and navigation techniques for efficient precast modeling.</li><li>Learn how to customize the workspace and work plane to optimize the modeling process for precast structures.</li><li>Understand the process of importing and managing reference files, such as architectural and structural drawings, to aid in model creation.</li><li>Creating and modifying precast parts.</li></ul>',
+      '<strong>Day 2: Connections & Detailing</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Explore various methods for cutting and modifying precast objects.</li><li>Learn how to add and detail reinforcement within precast elements.</li><li>Working with assemblies and batch editor.</li><li>Utilizing system components and extensions.</li><li>Develop skills in creating custom components to address specific project needs and design requirements.</li></ul>',
+      '<strong>Day 3: Drawings & Report</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Learn to generate comprehensive general arrangement drawings that illustrate the overall precast structure layout and design.</li><li>Editing and refining drawings.</li><li>Understand the process of assigning part numbers and creating detailed fabrication drawings for manufacturing and assembly.</li><li>Learn to extract and compile relevant data from the precast model to generate reports for material take-off.</li></ul>'
+    ],
+    assessment:{
+      intro:'To complete the course and earn the digital certificate, learners must pass a summative assessment with a minimum score of 75%, demonstrating the required level of proficiency.',
+      detail:'The assessment is conducted online and consists of questions designed to evaluate the learner\'s understanding of key concepts, tools, and best practices covered in the training.',
+      bullets:[
+        'Theory — multiple-choice questions covering core topics relevant to the training module',
+        'Attempts allowed — learners may attempt the assessment up to three times to achieve a passing score'
+      ]
+    }
+  },
+  {
+    id:'ts-steel-concrete-fundamental',
+    category:'tekla-structures',
+    title:'Tekla Structures — Steel & Concrete Fundamental Training',
+    eyebrow:'Tekla Structures',
+    skillLevel:'Fundamental',
+    duration:'3 days',
+    method:'Online (via Zoom) or Classroom',
+    lede:'This instructor-led BIM-based training course is offered exclusively to Tekla Structures users in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Steel & Concrete Fundamental training course introduces learners to the core functionalities of Tekla Structures for steel and concrete projects, focusing on real-world workflows for structural modeling, detailing, drawing generation, and reporting.<br><br>Learners will gain hands-on experience using Tekla Structures to model, detail, and document steel and concrete structures efficiently. The course emphasizes the practical application of default settings to handle actual project scenarios.',
+    contactNote:'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+    topics:[
+      'Basic Working Methods – Familiarization with core Tekla Structures workflows',
+      'Part Creation & Modification – Creating steel and concrete elements and adjusting their properties',
+      'Connections, Rebars & Detailing – Adding connections, reinforcement, and other details to parts',
+      'Drawing Generation – Producing accurate 2D drawings from 3D models',
+      'Report Creation – Generating reports from 3D models for fabrication and project documentation'
+    ],
+    outcomes:[
+      'Apply fundamental workflows of Tekla Structures for steel and concrete projects',
+      'Create and modify steel and concrete parts effectively',
+      'Add connections, rebars, and details accurately to parts',
+      'Generate shop drawings and reports from 3D models',
+      'Apply Tekla Structures skills to manage real-world projects efficiently'
+    ],
+    agenda:[
+      '<strong>Day 1: 3D Structure Fundamentals</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Get acquainted with the Tekla Structures interface, basic tools, and navigation techniques for efficient modeling of steel and concrete structures.</li><li>Learn how to customize the workspace and work plane to optimize the modeling process for both steel and concrete elements.</li><li>Understand the process of importing and managing reference files, such as architectural and structural drawings, to aid in model creation.</li><li>Creating and modifying both steel and concrete parts</li></ul>',
+      '<strong>Day 2: Connections & Detail Mastery</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Explore various methods for cutting steel and concrete objects</li><li>Learn how to add and detail connections, including welds, bolts for steel, and reinforcement for concrete</li><li>Utilizing system components and extensions</li><li>Develop skills in creating custom components</li></ul>',
+      '<strong>Day 3: Drawings & Report</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Learn to generate comprehensive general arrangement drawings</li><li>Editing and refining drawings</li><li>Understand the process of assigning part numbers and creating detailed fabrication drawings for manufacturing and assembly.</li><li>Learn to extract and compile relevant data from the model to generate reports for material take-off</li></ul>'
+    ],
+    assessment:{
+      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+      bullets:[
+        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+      ]
+    }
+  },
+  {
+    id:'ts-steel-fundamental',
+    category:'tekla-structures',
+    title:'Tekla Structures — Steel Fundamental Training',
+    eyebrow:'Tekla Structures',
+    skillLevel:'Fundamental',
+    duration:'3 days',
+    method:'Online (via Zoom) or Classroom',
+    lede:'This instructor-led BIM-based training course is offered exclusively to Tekla Structures users in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Steel Fundamental training course introduces learners to the core functionalities of Tekla Structures for steel and concrete projects, focusing on real-world workflows for structural modeling, detailing, drawing generation, and reporting.<br><br>Learners will gain hands-on experience using Tekla Structures to model, detail, and document steel structures efficiently. The course emphasizes the practical application of default settings to handle actual project scenarios.',
+    contactNote:'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+    topics:[
+      'Basic Working Methods – Familiarization with core Tekla Structures workflows',
+      'Part Creation & Modification – Creating steel elements and adjusting their properties',
+      'Connections & Detailing – Adding connections, bolts, and other details to parts',
+      'Drawing Generation – Producing accurate 2D shop drawings from the 3D models',
+      'Report Creation – Generating reports from 3D models for fabrication and documentation'
+    ],
+    outcomes:[
+      'Apply fundamental workflows of Tekla Structures in steel projects',
+      'Create and modify steel parts effectively',
+      'Add connections and details accurately to steel components',
+      'Generate shop drawings from 3D steel models',
+      'Produce reports to support fabrication and project management'
+    ],
+    agenda:[
+      '<strong>Day 1: 3D Structure Fundamentals</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Get acquainted with the Tekla Structures interface, basic tools, and navigation techniques for efficient steel detailing.</li><li>Learn how to customize the workspace and work plane to optimize the modeling process for steel structures.</li><li>Understand the process of importing and managing reference files, such as architectural and structural drawings, to aid in model creation.</li><li>Master the techniques for creating and modifying various steel structures.</li></ul>',
+      '<strong>Day 2: Connections & Detail Mastery</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Explore various methods for cutting</li><li>Learn how to add and detail connections, including welds and bolts.</li><li>Understand how to manage assemblies and utilize the batch editor for efficient modification.</li><li>Utilizing system components and extensions</li><li>Develop skills in creating custom components to address specific project needs and design requirements</li></ul>',
+      '<strong>Day 3: Drawings & Reports</strong><ul style="margin-top: 6px; margin-bottom: 16px;"><li>Creating professional general arrangement drawings to industry standards</li><li>Understand the process of assigning part numbers</li><li>Develop skills in modifying and enhancing drawings to meet specific presentation and documentation standards</li><li>Learn to extract and compile relevant data from the steel model to generate reports for material take-off</li></ul>'
+    ],
+    assessment:{
+      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+      bullets:[
+        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+      ]
+    }
+  },
 
   /* ---- Tekla Structures — placeholders ---- */
-  { id:'ts-precast-fundamental', category:'tekla-structures', placeholder:true,
-    title:'Tekla Structures — Precast Fundamental Training', eyebrow:'Tekla Structures',
-    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
-  { id:'ts-steel-concrete-fundamental', category:'tekla-structures', placeholder:true,
-    title:'Tekla Structures — Steel & Concrete Fundamental Training', eyebrow:'Tekla Structures',
-    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
-  { id:'ts-steel-fundamental', category:'tekla-structures', placeholder:true,
-    title:'Tekla Structures — Steel Fundamental Training', eyebrow:'Tekla Structures',
-    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
   { id:'ts-bridge-creator', category:'tekla-structures', placeholder:true,
     title:'Tekla Structures — Fundamental Bridge Creator Training', eyebrow:'Tekla Structures',
     skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
@@ -805,13 +890,11 @@ function openModal(courseTitle) {
   
   if (courseInput) courseInput.value = courseTitle;
   
-  // Reset views just in case
   const formView = document.getElementById('modalFormView');
   const successView = document.getElementById('modalSuccessView');
   if (formView) formView.style.display = 'block';
   if (successView) successView.style.display = 'none';
   
-  // Show modal
   if (modal) modal.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
@@ -823,13 +906,12 @@ function closeModal() {
 }
 
 function handleModalSubmit(event) {
-  event.preventDefault(); // Prevent standard page reload
+  event.preventDefault(); 
   
   const submitBtn = document.getElementById('submitBtn');
-  submitBtn.innerText = 'Submitting...'; // Provide UI feedback
+  submitBtn.innerText = 'Submitting...'; 
   submitBtn.disabled = true;
   
-  // Gather data
   const course   = document.getElementById('m_course').value;
   const fullName = document.getElementById('m_name').value;
   const workEmail= document.getElementById('m_email').value;
@@ -843,7 +925,7 @@ function handleModalSubmit(event) {
     document.getElementById('modalSuccessView').style.display = 'block';
     submitBtn.innerText = 'Submit Registration';
     submitBtn.disabled = false;
-    event.target.reset(); // clear form inputs for next time
+    event.target.reset(); 
   }
 
   if (GOOGLE_FORM_ACTION_URL && GOOGLE_FORM_ACTION_URL.indexOf("YOUR_FORM_ID") === -1) {
@@ -857,31 +939,23 @@ function handleModalSubmit(event) {
       if (GOOGLE_FORM_ENTRIES.company)    formData.append(GOOGLE_FORM_ENTRIES.company, company);
       if (GOOGLE_FORM_ENTRIES.country)    formData.append(GOOGLE_FORM_ENTRIES.country, country);
 
-      // Perform background submission using standard Promises
       if (window.fetch) {
         fetch(GOOGLE_FORM_ACTION_URL, {
           method: 'POST',
           mode: 'no-cors',
           body: formData
         })
-        .then(function() {
-          showSuccess();
-        })
+        .then(function() { showSuccess(); })
         .catch(function(err) {
           console.warn("Background submission error:", err);
-          showSuccess(); // Google blocks some readbacks but still accepts data, show success anyway.
+          showSuccess(); 
         });
-      } else {
-        showSuccess();
-      }
+      } else { showSuccess(); }
     } catch (err) {
       console.warn("Form construction error:", err);
       showSuccess();
     }
-  } else {
-    // If no real URL is set, just simulate a brief loading time for testing the UI
-    setTimeout(showSuccess, 800);
-  }
+  } else { setTimeout(showSuccess, 800); }
 }
 
 function badgeHTML(course){
@@ -908,6 +982,14 @@ function fullBodyHTML(c){
       ${c.topics ? `<div class="block"><h4>Key Learning Topics</h4><ul>${c.topics.map(t=>`<li>${t}</li>`).join('')}</ul></div>` : ''}
       ${c.outcomes ? `<div class="block"><h4>Learning Outcomes</h4><ul>${c.outcomes.map(t=>`<li>${t}</li>`).join('')}</ul></div>` : ''}
     </div>
+
+    ${c.agenda ? `
+    <div class="block" style="margin-bottom: 22px;">
+      <h4>Course Agenda</h4>
+      <div style="font-size: 14px; color: var(--ink);">
+        ${c.agenda.join('')}
+      </div>
+    </div>` : ''}
 
     ${c.assessment ? `
     <div class="assess-box">
