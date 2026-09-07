@@ -860,7 +860,7 @@ const COURSES = [
     skillLevel:'Fundamental', 
     duration:'3 days', 
     method:'Online (via Zoom) or Classroom',
-    lede: 'This instructor-led BIM-based training course is offered exclusively to Tekla Structures users in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Steel Fundamental training course introduces learners to the core functionalities of Tekla Structures for steel and concrete projects, focusing on real-world workflows for structural modeling, detailing, drawing generation, and reporting.<br><br>Learners will gain hands-on experience using Tekla Structures to model, detail, and document steel structures efficiently. The course emphasizes the practical application of default settings to handle actual project scenarios.',
+    lede: 'This instructor-led BIM-based training course is offered exclusively to Tekla Structures users in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Steel Fundamental training course introduces learners to the core functionalities of Tekla Structures for steel projects, focusing on real-world workflows for structural modeling, detailing, drawing generation, and reporting.<br><br>Learners will gain hands-on experience using Tekla Structures to model, detail, and document steel structures efficiently. The course emphasizes the practical application of default settings to handle actual project scenarios.',
     contactNote: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
     topics: [
       'Basic Working Methods – Familiarization with core Tekla Structures workflows',
@@ -951,7 +951,14 @@ const COURSES = [
       '<strong>Day 1: 3D Structure Fundamentals</strong><ul><li>Get acquainted with the Tekla Structures interface, basic tools, and navigation techniques for efficient modeling of offshore steel structures.</li><li>Learn how to customize the workspace and work plane to optimize the modeling process for steel offshore structures</li><li>Understand the process of importing and managing reference files.</li><li>Creating and modifying offshore steel parts</li></ul>',
       '<strong>Day 2 & 3: Connections & Detailing</strong><ul><li>Explore various methods for cutting and modifying steel objects to achieve complex shapes and connections typical in offshore structures</li><li>Learn how to add and detail connections, including welds and bolts</li><li>Understand how to manage assemblies and utilize the batch editor for efficient modification</li><li>Utilizing system components and extensions</li><li>Develop skills in creating custom components to address specific project needs and design requirements</li></ul>',
       '<strong>Day 4: Drawings & Report</strong><ul><li>Creating professional general arrangement drawings to industry standards</li><li>Develop skills in modifying and enhancing drawings to meet specific presentation and documentation standards</li><li>Master the procedures for printing and exporting drawings in various formats for collaboration and sharing</li><li>Learn to extract and compile relevant data from the steel offshore model to generate reports for material take-off</li></ul>'
-    ]
+    ],
+    assessment: {
+      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+      bullets:[
+        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+      ]
+    }
   },
   { 
     id:'ts-steel-advanced-offshore', 
@@ -980,7 +987,14 @@ const COURSES = [
       '<strong>Day 1: Drawing Template & Custom Attributes</strong><ul><li>Customizing drawing title blocks and revision templates</li><li>Customizing drawing material report templates</li><li>Integrating title blocks and material reports into drawing layouts</li><li>Creating and customizing report templates</li><li>Defining and creating custom user defined attributes (UDA)</li></ul>',
       '<strong>Day 2: Parametric Custom Components</strong><ul><li>Creating custom parts</li><li>Developing custom details</li><li>Creation of custom connections with predefined rules</li><li>Modifying the dialog boxes of custom components</li><li>Configuring auto connection rules</li></ul>',
       '<strong>Day 3: Tekla-E3D & S3D Integration</strong><ul><li>Install the required extensions to enable interoperability between Tekla Structures and E3D/PDMS/S3D</li><li>Export data from E3D/PDMS</li><li>Optimize import process</li><li>Map profiles and materials</li><li>Assign UDAs to new Tekla parts to customize the integration</li><li>Import and export to S3D</li></ul>'
-    ]
+    ],
+    assessment: {
+      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+      bullets:[
+        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+      ]
+    }
   },
   { id:'ts-bridge-creator', category:'tekla-structures', placeholder:true,
     title:'Tekla Structures — Fundamental Bridge Creator Training', eyebrow:'Tekla Structures',
@@ -1024,8 +1038,15 @@ const COURSES = [
       intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
       detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
       bullets:[
+        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+      ],
+      assessment: {
+      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+      bullets:[
         'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structural Designer Professional Certification examination.'
       ]
+    }
     }
   },
   { 
@@ -1100,7 +1121,7 @@ const COURSES = [
       '<strong>Staged Construction</strong><ul><li>Staged Construction Analysis (SCA) & General Procedure</li><li>Create Model & Design Load Combinations, Load Combination Assignment</li><li>Define Construction Stages and Stage Duration</li><li>Reassign Members between Stages</li><li>Create Staged Construction Load Combination</li><li>Review Concrete Modification Factors for Stages</li><li>Activate Staged Construction Analysis and select other results sets</li><li>Run the Design, Review Results & Output Calculations</li><li>Design Comparison & Exercises</li></ul>',
       '<strong>Advanced Modeling & Properties</strong><ul><li>Orthotropic Properties for Walls (New Orthotropic Meshed Walls, Exercise)</li><li>Reference Models (Exercise)</li><li>Planarize Inclined Plane (Exercise)</li></ul>'
     ],
-     assessment: {
+    assessment: {
       intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
       detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
       bullets:[
@@ -1108,9 +1129,45 @@ const COURSES = [
       ]
     }
   },
-  { id:'tsd-precast', category:'tekla-structural-designer', placeholder:true,
-    title:'Tekla Structural Designer — Precast Structure Design Training', eyebrow:'Tekla Structural Designer',
-    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
+  { 
+    id:'tsd-precast', 
+    category:'tekla-structural-designer',
+    title:'Tekla Structural Designer — Precast Structure Design Training', 
+    eyebrow:'Tekla Structural Designer',
+    skillLevel:'Fundamental', 
+    prerequisite:'<ul><li>Basic engineering knowledge</li></ul>',
+    duration:'2 half-days (online) or 1 full day (classroom)', 
+    method:'Online (via Zoom) or Classroom',
+    lede: 'This instructor-led training is offered exclusively to Tekla customers in Singapore and Malaysia. Conducted in English, the Tekla Structural Designer Precast Structure Design course is delivered over 1 full day (classroom) or 2 half-days (online) and follows Eurocode standards (EN 1992-1-1).<br><br>Designed for engineers, the course provides step-by-step guidance on setting up models with precast elements and carrying out the complete design of precast concrete buildings in Tekla Structural Designer, ensuring accuracy, efficiency, and full Eurocode compliance.',
+    contactNote: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+    topics: [
+      'Introduction to Tekla Structural Designer – Overview of features for precast design.',
+      'Model Setup – Creating models with precast elements.',
+      'Analysis and Design – Applying Eurocode-compliant design for precast concrete buildings.',
+      'Tekla Tedds Integration – Transferring analysis results for calculations.',
+      'Code Compliance – Meeting Eurocode (EN 1992-1-1) design requirements.',
+      'Reporting – Producing calculation reports for submission.'
+    ],
+    outcomes: [
+      'Set up and model precast elements in Tekla Structural Designer.',
+      'Perform Eurocode-compliant design for precast concrete structures.',
+      'Analyse and interpret design results effectively.',
+      'Integrate Tekla Structural Designer with Tekla Tedds for calculations.',
+      'Generate reports for authority submission.'
+    ],
+    agenda: [
+      '<strong>The Interface & Model Setup</strong><ul><li>Start a New Project</li><li>Setting Floor Levels and Grid Lines</li><li>Modeling Members at 1st Floor Level</li><li>Modeling Precast Members at 2nd, 3rd Floor Levels & Roof</li><li>Validate the Model</li><li>Applying Loads and Creating Load Combinations</li><li>Renumber Members</li></ul>',
+      '<strong>Analysis & Design (Static)</strong><ul><li>Loading Summaries & Display Graphical Results</li><li>Design All (Static)</li><li>Member Check/Design (Cast-in-place members) - Info Only</li><li>Report Configurations & Generating Reports</li><li>Getting Critical Design Forces for Additional Manual Checks</li><li>Enveloping Results for Precast and Cast-in-place Groups</li><li>Drawing Generation - Only for Cast-in-place Members</li></ul>',
+      '<strong>Tekla Tedds Integration & Construction Stages</strong><ul><li>Precast Beam and Column Design using Tedds</li><li>Precast Column/Beam Calculation Reports using Tedds</li><li>Adjust Precast Beam Section Sizes and Split Continuous Beams</li><li>Applying Construction Loads and Run the Analysis</li><li>Redesign Precast Members at Construction Stage using Tedds</li><li>Other Precast Element Design Calculation in Tekla Tedds</li><li>Wind Wizard and Foundation Modeling/Design</li></ul>'
+    ],
+    assessment: {
+      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+      bullets:[
+        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structural Designer Professional Certification examination.'
+      ]
+    }
+  },
 
   /* ---- Tekla Tedds ---- */
   { id:'tedds-fundamental', category:'tekla-tedds', placeholder:true,
