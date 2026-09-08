@@ -516,6 +516,10 @@
     border-color: var(--blue);
     box-shadow: 0 0 0 3px rgba(0, 99, 163, 0.15);
   }
+  textarea.form-control {
+    resize: vertical;
+    min-height: 60px;
+  }
   .readonly-field {
     background: #F4F6F8;
     font-weight: 600;
@@ -684,6 +688,12 @@
           </div>
         </div>
 
+        <!-- NEW FIELD for Custom Training Needs -->
+        <div class="form-group">
+          <label class="form-label" for="m_remarks">Additional Remarks / Customization Needs</label>
+          <textarea id="m_remarks" class="form-control" rows="2" placeholder="Let us know if you have specific topics, preferred dates, or an estimated duration in mind..."></textarea>
+        </div>
+
         <div class="modal-actions">
           <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
           <button type="submit" class="btn-primary" id="submitBtn">Submit Registration</button>
@@ -722,7 +732,8 @@ const GOOGLE_FORM_ENTRIES = {
   jobTitle:   "entry.411940626",
   phoneNum:   "entry.1345572775",
   company:    "entry.494374067",
-  country:    "entry.191469004"
+  country:    "entry.191469004",
+  remarks:    "entry.436961943" // TODO: Add a long-text question to Google Form and update this entry ID
 };
 
 // ============================================================================
@@ -996,9 +1007,41 @@ const COURSES = [
       ]
     }
   },
-  { id:'ts-bridge-creator', category:'tekla-structures', placeholder:true,
-    title:'Tekla Structures — Fundamental Bridge Creator Training', eyebrow:'Tekla Structures',
-    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
+  { 
+    id:'ts-bridge-creator', 
+    category:'tekla-structures', 
+    placeholder:true,
+    title:'Tekla Structures — Fundamental Bridge Creator Training', 
+    eyebrow:'Tekla Structures',
+    skillLevel:'Fundamental', 
+    duration:'TBD', 
+    method:'TBD' 
+  },
+  {
+    id:'ts-custom-training',
+    category:'tekla-structures',
+    title:'Tekla Structures — Custom Training',
+    eyebrow:'Tekla Structures',
+    skillLevel:'Customized',
+    duration:'Variation / TBD',
+    method:'Online (via Zoom) or Classroom',
+    lede:'This instructor-led training course is open to Tekla Structures users based in Malaysia and Singapore. Conducted in English, this Tekla Structures Custom Training course is designed for professionals and organizations seeking a customized learning experience with Tekla Structures. The course content is tailored to match your specific workflows, project requirements, and skill levels, ensuring relevant, practical knowledge that can be applied immediately.',
+    contactNote:'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+    topics:[
+      '<strong style="color:var(--blue);">Depending on your needs, the training may include (but is not limited to the topics below):</strong>',
+      'Introduction to Tekla Structures – Overview of software capabilities and benefits.',
+      'Model Creation and Modification – Creating, editing, and managing model objects according to project standards.',
+      'Reinforcement, Connections, and Detailing – Applying reinforcement, components, and custom details.',
+      'Drawing Production – Generating accurate fabrication, erection, and general arrangement drawings.',
+      'Reporting and Data Management – Producing reports and organizing project information.'
+    ],
+    outcomes:[
+      'Apply Tekla Structures workflows relevant to their project requirements.',
+      'Efficiently create, modify, and manage model objects and assemblies.',
+      'Produce accurate drawings and reports from the 3D model.',
+      'Improve productivity by following recommended best practices.'
+    ]
+  },
 
   /* ---- Tekla Structural Designer ---- */
   { 
@@ -1038,15 +1081,8 @@ const COURSES = [
       intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
       detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
       bullets:[
-        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
-      ],
-      assessment: {
-      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
-      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
-      bullets:[
         'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structural Designer Professional Certification examination.'
       ]
-    }
     }
   },
   { 
@@ -1213,6 +1249,7 @@ function handleModalSubmit(event) {
   const phoneNum = document.getElementById('m_phone').value;
   const company  = document.getElementById('m_company').value;
   const country  = document.getElementById('m_country').value;
+  const remarks  = document.getElementById('m_remarks').value;
 
   function showSuccess() {
     document.getElementById('modalFormView').style.display = 'none';
@@ -1232,6 +1269,7 @@ function handleModalSubmit(event) {
       if (GOOGLE_FORM_ENTRIES.phoneNum)   formData.append(GOOGLE_FORM_ENTRIES.phoneNum, phoneNum);
       if (GOOGLE_FORM_ENTRIES.company)    formData.append(GOOGLE_FORM_ENTRIES.company, company);
       if (GOOGLE_FORM_ENTRIES.country)    formData.append(GOOGLE_FORM_ENTRIES.country, country);
+      if (GOOGLE_FORM_ENTRIES.remarks)    formData.append(GOOGLE_FORM_ENTRIES.remarks, remarks);
 
       // Perform background submission using standard Promises
       if (window.fetch) {
