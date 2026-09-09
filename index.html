@@ -60,7 +60,11 @@
     max-width: 1080px;
     margin: 0 auto;
   }
+  
   .header-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 22px;
   }
   .trimble-logo-img {
@@ -69,6 +73,69 @@
     object-fit: contain;
     display: block;
   }
+  
+  /* Language Selector Styles */
+  .lang-selector-wrapper {
+    position: relative;
+  }
+  .lang-selector-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    color: var(--ink);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .lang-selector-btn:hover {
+    background: #f0f2f5;
+  }
+  .lang-selector-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  .lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: 4px;
+    background: #ffffff;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    min-width: 150px;
+    z-index: 100;
+    display: none;
+    flex-direction: column;
+  }
+  .lang-dropdown.active {
+    display: flex;
+  }
+  .lang-option {
+    padding: 8px 16px;
+    color: var(--ink);
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+    border: none;
+    background: none;
+    width: 100%;
+  }
+  .lang-option:hover {
+    background: #f0f2f5;
+  }
+  .lang-option.selected {
+    background: #EAF2F8;
+    color: var(--blue);
+    font-weight: 600;
+  }
+
   .header-kicker {
     display: flex;
     align-items: center;
@@ -609,16 +676,34 @@
 <header class="portal-header">
   <div class="header-inner">
     <div class="header-top-row">
-      <!-- Set to look for the image in the exact same local folder / GitHub repo -->
       <img src="TrimbleR-Logo-Boxed-Blue10-RGB.png" alt="Trimble Logo" class="trimble-logo-img" onerror="this.onerror=null; this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Trimble_logo.svg/320px-Trimble_logo.svg.png';">
+      
+      <!-- Language Selector -->
+      <div class="lang-selector-wrapper">
+        <button class="lang-selector-btn" onclick="toggleLangDropdown(event)">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+          </svg>
+          <span id="currentLangLabel">MY/SG (English)</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div class="lang-dropdown" id="langDropdown">
+          <button class="lang-option selected" onclick="setLanguage('en')">MY/SG (English)</button>
+          <button class="lang-option" onclick="setLanguage('id')">Indonesia (Bahasa Indonesia)</button>
+          <button class="lang-option" onclick="setLanguage('th')" disabled style="color:var(--grey-line); cursor:not-allowed;">Thailand (Coming Soon)</button>
+        </div>
+      </div>
     </div>
+    
     <div class="header-kicker">
-      <span class="mono">Trimble Training Services</span>
+      <span class="mono" id="t-kicker1">Trimble Training Services</span>
       <span class="dot"></span>
-      <span class="mono">Southeast Asia</span>
+      <span class="mono" id="t-kicker2">Southeast Asia</span>
     </div>
-    <h1 class="portal-title">SEA Training Portal</h1>
-    <p class="portal-sub">Instructor-led courses covering Tekla Structures, Tekla Structural Designer, Tekla Tedds, and CORENET X readiness — for teams working across Southeast Asia. Select a course below to view the full syllabus and register your interest.</p>
+    <h1 class="portal-title" id="t-title">SEA Training Portal</h1>
+    <p class="portal-sub" id="t-sub">Instructor-led courses covering Tekla Structures, Tekla Structural Designer, Tekla Tedds, and CORENET X readiness — for teams working across Southeast Asia. Select a course below to view the full syllabus and register your interest.</p>
   </div>
 </header>
 
@@ -634,68 +719,60 @@
     
     <!-- View 1: The Form -->
     <div id="modalFormView">
-      <h3 class="modal-title">Register Interest</h3>
-      <p class="modal-sub">Complete the form below and the Trimble SEA Training team will get back to you with schedule details and pricing.</p>
+      <h3 class="modal-title" id="t-m-title">Register Interest</h3>
+      <p class="modal-sub" id="t-m-sub">Complete the form below and the Trimble SEA Training team will get back to you with schedule details and pricing.</p>
       
       <form onsubmit="handleModalSubmit(event)">
         <div class="form-group">
-          <label class="form-label" for="m_course">Selected Course</label>
+          <label class="form-label" for="m_course" id="t-m-l-course">Selected Course</label>
           <input type="text" id="m_course" class="form-control readonly-field" readonly required>
         </div>
         
         <div class="form-grid">
           <div class="form-group">
-            <label class="form-label" for="m_name">Full Name *</label>
+            <label class="form-label" for="m_name" id="t-m-l-name">Full Name *</label>
             <input type="text" id="m_name" class="form-control" placeholder="e.g. John Doe" required>
           </div>
           
           <div class="form-group">
-            <label class="form-label" for="m_email">Work Email *</label>
+            <label class="form-label" for="m_email" id="t-m-l-email">Work Email *</label>
             <input type="email" id="m_email" class="form-control" placeholder="name@company.com" required>
           </div>
         </div>
 
         <div class="form-grid">
           <div class="form-group">
-            <label class="form-label" for="m_job">Designation / Job Title *</label>
+            <label class="form-label" for="m_job" id="t-m-l-job">Designation / Job Title *</label>
             <input type="text" id="m_job" class="form-control" placeholder="e.g. Structural Engineer" required>
           </div>
           
           <div class="form-group">
-            <label class="form-label" for="m_phone">Contact Number *</label>
+            <label class="form-label" for="m_phone" id="t-m-l-phone">Contact Number *</label>
             <input type="tel" id="m_phone" class="form-control" placeholder="+65 9123 4567" required>
           </div>
         </div>
 
         <div class="form-grid">
           <div class="form-group">
-            <label class="form-label" for="m_company">Company / Organization *</label>
+            <label class="form-label" for="m_company" id="t-m-l-company">Company / Organization *</label>
             <input type="text" id="m_company" class="form-control" placeholder="Company Name Pte Ltd" required>
           </div>
           
           <div class="form-group">
-            <label class="form-label" for="m_country">Country / Region *</label>
+            <label class="form-label" for="m_country" id="t-m-l-country">Country / Region *</label>
             <select id="m_country" class="form-control" required>
-              <option value="">Select country...</option>
-              <option value="Singapore">Singapore</option>
-              <option value="Malaysia">Malaysia</option>
-              <option value="Indonesia">Indonesia</option>
-              <option value="Thailand">Thailand</option>
-              <option value="Vietnam">Vietnam</option>
-              <option value="Philippines">Philippines</option>
-              <option value="Other SEA">Other Southeast Asia</option>
+              <!-- Options populated by JS based on language -->
             </select>
           </div>
         </div>
 
-        <!-- NEW FIELD for Custom Training Needs -->
         <div class="form-group">
-          <label class="form-label" for="m_remarks">Additional Remarks / Customization Needs</label>
-          <textarea id="m_remarks" class="form-control" rows="2" placeholder="Let us know if you have specific topics, preferred dates, or an estimated duration in mind..."></textarea>
+          <label class="form-label" for="m_remarks" id="t-m-l-remarks">Additional Remarks / Customization Needs</label>
+          <textarea id="m_remarks" class="form-control" rows="2" placeholder="Let us know if you have specific topics..."></textarea>
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="btn-secondary" onclick="closeModal()">Cancel</button>
+          <button type="button" class="btn-secondary" onclick="closeModal()" id="t-m-btn-cancel">Cancel</button>
           <button type="submit" class="btn-primary" id="submitBtn">Submit Registration</button>
         </div>
       </form>
@@ -704,25 +781,168 @@
     <!-- View 2: Success Message -->
     <div id="modalSuccessView" style="display:none; text-align:center; padding: 20px 10px;">
       <div class="success-icon">✓</div>
-      <h3 class="modal-title" style="margin-bottom:10px;">Thank You!</h3>
-      <p class="modal-sub" style="margin-bottom:24px;">Your interest has been successfully registered. The Trimble Training Services SEA team will contact you shortly.</p>
-      <button class="btn-primary" onclick="closeModal()">Done</button>
+      <h3 class="modal-title" style="margin-bottom:10px;" id="t-m-s-title">Thank You!</h3>
+      <p class="modal-sub" style="margin-bottom:24px;" id="t-m-s-sub">Your interest has been successfully registered. The Trimble Training Services SEA team will contact you shortly.</p>
+      <button class="btn-primary" onclick="closeModal()" id="t-m-s-btn">Done</button>
     </div>
   </div>
 </div>
 
 <footer>
   <div class="footer-inner">
-    <span>© 2026 Trimble Solutions SEA Pte Ltd. All rights reserved.</span>
-    <span>Questions? <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a></span>
+    <span id="t-f-copyright">© 2026 Trimble Solutions SEA Pte Ltd. All rights reserved.</span>
+    <span id="t-f-questions">Questions? <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a></span>
   </div>
 </footer>
 
 <script>
 // ============================================================================
-// HOW TO SET UP GOOGLE FORMS SILENT SUBMISSION
-// 1. Put your formResponse URL below.
-// 2. Put the entry.XXXXXXX numbers for each field below.
+// LANGUAGE DICTIONARIES & STATE
+// ============================================================================
+let currentLang = 'en';
+
+const TRANSLATIONS = {
+  en: {
+    kicker1: "Trimble Training Services",
+    kicker2: "Southeast Asia",
+    title: "SEA Training Portal",
+    sub: "Instructor-led courses covering Tekla Structures, Tekla Structural Designer, Tekla Tedds, and CORENET X readiness — for teams working across Southeast Asia. Select a course below to view the full syllabus and register your interest.",
+    
+    // Modal Form
+    mTitle: "Register Interest",
+    mSub: "Complete the form below and the Trimble SEA Training team will get back to you with schedule details and pricing.",
+    mlCourse: "Selected Course",
+    mlName: "Full Name *",
+    mlEmail: "Work Email *",
+    mlJob: "Designation / Job Title *",
+    mlPhone: "Contact Number *",
+    mlCompany: "Company / Organization *",
+    mlCountry: "Country / Region *",
+    mlRemarks: "Additional Remarks / Customization Needs",
+    mPlaceholderName: "e.g. John Doe",
+    mPlaceholderEmail: "name@company.com",
+    mPlaceholderJob: "e.g. Structural Engineer",
+    mPlaceholderPhone: "+65 9123 4567",
+    mPlaceholderCompany: "Company Name Pte Ltd",
+    mPlaceholderRemarks: "Let us know if you have specific topics, preferred dates, or an estimated duration in mind...",
+    
+    countryOptions: [
+      {val:"", text:"Select country..."},
+      {val:"Singapore", text:"Singapore"},
+      {val:"Malaysia", text:"Malaysia"},
+      {val:"Indonesia", text:"Indonesia"},
+      {val:"Thailand", text:"Thailand"},
+      {val:"Vietnam", text:"Vietnam"},
+      {val:"Philippines", text:"Philippines"},
+      {val:"Other SEA", text:"Other Southeast Asia"}
+    ],
+
+    btnCancel: "Cancel",
+    btnSubmit: "Submit Registration",
+    btnSubmitting: "Submitting...",
+    
+    // Modal Success
+    msTitle: "Thank You!",
+    msSub: "Your interest has been successfully registered. The Trimble Training Services SEA team will contact you shortly.",
+    msBtn: "Done",
+
+    // Footer
+    fCopyright: "© 2026 Trimble Solutions SEA Pte Ltd. All rights reserved.",
+    fQuestions: "Questions? <a href=\"mailto:tekla.training.sea@trimble.com\">tekla.training.sea@trimble.com</a>",
+
+    // UI elements
+    uiCourseCount: "courses",
+    uiCourseCount1: "course",
+    uiNoResults: "No courses in this category yet.",
+    uiTBD: "TBD",
+    
+    // Course Card labels
+    lblSkillLevel: "Skill Level",
+    lblMethod: "Training Method",
+    lblDuration: "Duration",
+    lblPrereq: "Pre-requisite",
+    lblTopics: "Key Learning Topics",
+    lblOutcomes: "Learning Outcomes",
+    lblAgenda: "Course Agenda",
+    lblAssessment: "Assessment & Certification",
+    lblRegister: "Register interest →",
+    lblCtaHint: "Opens a quick registration form — no commitment required.",
+    lblPlaceholderTag: "Details coming soon",
+    lblPlaceholderBody: "Full syllabus details for this course are being finalised. In the meantime, register your interest below and the SEA training team will follow up with dates and pricing."
+  },
+  id: {
+    kicker1: "Layanan Pelatihan Trimble",
+    kicker2: "Asia Tenggara",
+    title: "Portal Pelatihan Indonesia",
+    sub: "Kursus berinstruktur yang mencakup Tekla Structures dan Tekla Structural Designer — untuk pengguna di seluruh Indonesia. Pilih kursus di bawah ini untuk melihat silabus lengkap dan mendaftarkan minat Anda.",
+    
+    // Modal Form
+    mTitle: "Daftar Minat",
+    mSub: "Lengkapi formulir di bawah ini dan tim Pelatihan Trimble SEA akan menghubungi Anda kembali mengenai rincian jadwal dan harga.",
+    mlCourse: "Kursus yang Dipilih",
+    mlName: "Nama Lengkap *",
+    mlEmail: "Email Kantor *",
+    mlJob: "Jabatan / Posisi Pekerjaan *",
+    mlPhone: "Nomor Kontak *",
+    mlCompany: "Perusahaan / Organisasi *",
+    mlCountry: "Negara / Wilayah *",
+    mlRemarks: "Catatan Tambahan / Kebutuhan Kustomisasi",
+    mPlaceholderName: "contoh: John Doe",
+    mPlaceholderEmail: "nama@perusahaan.com",
+    mPlaceholderJob: "contoh: Structural Engineer",
+    mPlaceholderPhone: "+62 812 3456 7890",
+    mPlaceholderCompany: "Nama Perusahaan PT/CV",
+    mPlaceholderRemarks: "Beri tahu kami jika Anda memiliki topik khusus, tanggal yang diinginkan, atau estimasi durasi...",
+    
+    countryOptions: [
+      {val:"", text:"Pilih negara..."},
+      {val:"Singapore", text:"Singapura"},
+      {val:"Malaysia", text:"Malaysia"},
+      {val:"Indonesia", text:"Indonesia"},
+      {val:"Thailand", text:"Thailand"},
+      {val:"Vietnam", text:"Vietnam"},
+      {val:"Philippines", text:"Filipina"},
+      {val:"Other SEA", text:"Asia Tenggara Lainnya"}
+    ],
+
+    btnCancel: "Batal",
+    btnSubmit: "Kirim Pendaftaran",
+    btnSubmitting: "mengirim...",
+    
+    // Modal Success
+    msTitle: "Terima Kasih!",
+    msSub: "Pendaftaran minat Anda berhasil dikirim. Tim Layanan Pelatihan Trimble SEA akan segera menghubungi Anda.",
+    msBtn: "Selesai",
+
+    // Footer
+    fCopyright: "© 2026 Trimble Solutions SEA Pte Ltd. Hak cipta dilindungi undang-undang.",
+    fQuestions: "Pertanyaan? <a href=\"mailto:tekla.training.sea@trimble.com\">tekla.training.sea@trimble.com</a>",
+
+    // UI elements
+    uiCourseCount: "kursus",
+    uiCourseCount1: "kursus",
+    uiNoResults: "Belum ada kursus dalam kategori ini.",
+    uiTBD: "Akan Ditentukan",
+    
+    // Course Card labels
+    lblSkillLevel: "Tingkat Keahlian",
+    lblMethod: "Metode Pelatihan",
+    lblDuration: "Durasi",
+    lblPrereq: "Prasyarat",
+    lblTopics: "Topik Pembelajaran Utama",
+    lblOutcomes: "Hasil Pembelajaran",
+    lblAgenda: "Agenda Kursus",
+    lblAssessment: "Penilaian & Sertifikasi",
+    lblRegister: "Daftar Minat →",
+    lblCtaHint: "Membuka formulir pendaftaran cepat — tanpa komitmen awal.",
+    lblPlaceholderTag: "Rincian segera hadir",
+    lblPlaceholderBody: "Rincian silabus lengkap untuk kursus ini sedang difinalisasi. Sementara itu, daftarkan minat Anda di bawah ini dan tim pelatihan SEA akan menindaklanjuti dengan informasi tanggal dan harga."
+  }
+};
+
+
+// ============================================================================
+// DATA SETTINGS (Dual Language)
 // ============================================================================
 const GOOGLE_FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLScLxUO8ZSzjfy2bSq8wP_2pwI3bMn1u7YQjqM--lrQnrgRfuA/formResponse";
 const GOOGLE_FORM_ENTRIES = {
@@ -733,58 +953,100 @@ const GOOGLE_FORM_ENTRIES = {
   phoneNum:   "entry.1345572775",
   company:    "entry.494374067",
   country:    "entry.191469004",
-  remarks:    "entry.436961943" // TODO: Add a long-text question to Google Form and update this entry ID
+  remarks:    "entry.436961943"
 };
 
-// ============================================================================
-// DATA SETTINGS
-// ============================================================================
+// Categories are defined with objects for translations
 const CATEGORIES = [
-  { id:'all',                       label:'All Courses' },
-  { id:'corenet-x',                 label:'CORENET X Readiness' },
-  { id:'tekla-structures',          label:'Tekla Structures' },
-  { id:'tekla-structural-designer', label:'Tekla Structural Designer' },
-  { id:'tekla-tedds',               label:'Tekla Tedds' },
+  { id:'all',                       label: { en: 'All Courses', id: 'Semua Kursus' } },
+  { id:'corenet-x',                 label: { en: 'CORENET X Readiness', id: 'Kesiapan CORENET X' } },
+  { id:'tekla-structures',          label: { en: 'Tekla Structures', id: 'Tekla Structures' } },
+  { id:'tekla-structural-designer', label: { en: 'Tekla Structural Designer', id: 'Tekla Structural Designer' } },
+  { id:'tekla-tedds',               label: { en: 'Tekla Tedds', id: 'Tekla Tedds' } },
 ];
 
+// Courses contain objects mapping 'en' and 'id' for translatable fields
 const COURSES = [
   {
     id:'corenet-x-ifc-sg',
     category:'corenet-x',
+    availableIn: ['en'], // HOW TO MANAGE: Add this array to restrict visibility. This course only shows for 'en' (MY/SG).
     featured:true,
-    title:'Tekla IFC+SG Workflow Training for CORENET X Readiness',
     eyebrow:'CORENET X Readiness',
-    skillLevel:'Fundamental',
-    duration:'2 Days',
-    method:'Classroom',
-    lede:'This instructor-led course is open to Tekla users in Singapore only, and is conducted in English. Over 2 days, learners build the essential skills to use Tekla Structures across structural BIM modeling, learn the fundamental working methods of Trimble products and Tekla IFC+SG plugins, and become familiar with the Tekla IFC+SG workflow needed to prepare a CORENET X submission.',
-    contactNote:'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
-    topics:[
-      'The Tekla ecosystem for CORENET X',
-      'The <a href="https://support.tekla.com/corenet-x-ifc-sg" target="_blank" rel="noopener">Tekla IFC+SG Resource Centre</a> in Tekla User Assistance (TUA)',
-      'Working with the BIM tool Tekla Structures',
-      'Design-to-BIM workflows using Tekla IFC+SG plugins',
-      'Preparing IFC+SG models for CORENET X submission'
-    ],
-    outcomes:[
-      'Understand the Tekla ecosystem for CORENET X',
-      'Navigate and use the IFC+SG resources available in Tekla User Assistance (TUA)',
-      'Work effectively with the BIM tool Tekla Structures',
-      'Perform interoperability between the A&D model and the BIM model',
-      'Apply the automated process of transferring structural design data to the BIM model using Tekla IFC+SG plugins',
-      'Generate IFC+SG-compliant BIM model data',
-      'Open the IFC+SG model in a universal IFC viewer (Trimble Connect) with integrated IFC+SG data',
-      'Use Trimble Connect Model Explorer to review and manage imported IFC+SG data',
-      'Use Trimble Connect Model Checker to validate and update imported IFC+SG data',
-      'Use Trimble Connect to communicate and manage model changes'
-    ],
-    assessment:{
-      intro:'To complete the course and earn the digital certificate, learners must pass a summative assessment with a minimum score of 75%, demonstrating the required level of proficiency.',
-      detail:'The assessment is conducted online and consists of questions designed to evaluate the learner\'s understanding of key concepts, tools, and best practices covered in the training.',
-      bullets:[
-        'Theory — multiple-choice questions covering core topics relevant to the training module',
-        'Attempts allowed — learners may attempt the assessment up to three times to achieve a passing score'
+    title: { 
+      en: 'Tekla IFC+SG Workflow Training for CORENET X Readiness', 
+      id: 'Pelatihan Alur Kerja Tekla IFC+SG untuk Kesiapan CORENET X' 
+    },
+    skillLevel: { en: 'Fundamental', id: 'Tingkat Dasar' },
+    duration: { en: '2 Days', id: '2 Hari' },
+    method: { en: 'Classroom', id: 'Tatap Muka (Kelas)' },
+    lede: {
+      en: 'This instructor-led course is open to Tekla users in Singapore only, and is conducted in English. Over 2 days, learners build the essential skills to use Tekla Structures across structural BIM modeling, learn the fundamental working methods of Trimble products and Tekla IFC+SG plugins, and become familiar with the Tekla IFC+SG workflow needed to prepare a CORENET X submission.',
+      id: 'Kursus dengan instruktur ini terbuka untuk pengguna Tekla di Singapura saja, dan dibawakan dalam Bahasa Inggris. Selama 2 hari, peserta akan membangun keterampilan esensial untuk menggunakan Tekla Structures di seluruh pemodelan BIM struktur, mempelajari metode kerja mendasar produk Trimble dan plugin Tekla IFC+SG, serta memahami alur kerja Tekla IFC+SG yang diperlukan untuk mempersiapkan pengajuan CORENET X.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        'The Tekla ecosystem for CORENET X',
+        'The <a href="https://support.tekla.com/corenet-x-ifc-sg" target="_blank" rel="noopener">Tekla IFC+SG Resource Centre</a> in Tekla User Assistance (TUA)',
+        'Working with the BIM tool Tekla Structures',
+        'Design-to-BIM workflows using Tekla IFC+SG plugins',
+        'Preparing IFC+SG models for CORENET X submission'
+      ],
+      id: [
+        'Ekosistem Tekla untuk CORENET X',
+        '<a href="https://support.tekla.com/corenet-x-ifc-sg" target="_blank" rel="noopener">Pusat Informasi Tekla IFC+SG</a> di Tekla User Assistance (TUA)',
+        'Bekerja dengan perangkat lunak BIM Tekla Structures',
+        'Alur kerja Design-to-BIM menggunakan plugin Tekla IFC+SG',
+        'Mempersiapkan model IFC+SG untuk pengajuan CORENET X'
       ]
+    },
+    outcomes: {
+      en: [
+        'Understand the Tekla ecosystem for CORENET X',
+        'Navigate and use the IFC+SG resources available in Tekla User Assistance (TUA)',
+        'Work effectively with the BIM tool Tekla Structures',
+        'Perform interoperability between the A&D model and the BIM model',
+        'Apply the automated process of transferring structural design data to the BIM model using Tekla IFC+SG plugins',
+        'Generate IFC+SG-compliant BIM model data',
+        'Open the IFC+SG model in a universal IFC viewer (Trimble Connect) with integrated IFC+SG data',
+        'Use Trimble Connect Model Explorer to review and manage imported IFC+SG data',
+        'Use Trimble Connect Model Checker to validate and update imported IFC+SG data',
+        'Use Trimble Connect to communicate and manage model changes'
+      ],
+      id: [
+        'Memahami ekosistem Tekla untuk CORENET X',
+        'Menavigasi dan menggunakan sumber daya IFC+SG yang tersedia di Tekla User Assistance (TUA)',
+        'Bekerja secara efektif dengan perangkat lunak BIM Tekla Structures',
+        'Melakukan interoperabilitas antara model A&D dan model BIM',
+        'Menerapkan proses otomatis pemindahan data desain struktur ke model BIM menggunakan plugin Tekla IFC+SG',
+        'Menghasilkan data model BIM yang patuh pada standar IFC+SG',
+        'Membuka model IFC+SG di viewer IFC universal (Trimble Connect) dengan data IFC+SG terintegrasi',
+        'Menggunakan Trimble Connect Model Explorer untuk meninjau dan mengelola data IFC+SG yang diimpor',
+        'Menggunakan Trimble Connect Model Checker untuk memvalidasi dan memperbarui data IFC+SG yang diimpor',
+        'Menggunakan Trimble Connect untuk berkomunikasi dan mengelola perubahan model'
+      ]
+    },
+    assessment: {
+      en: {
+        intro:'To complete the course and earn the digital certificate, learners must pass a summative assessment with a minimum score of 75%, demonstrating the required level of proficiency.',
+        detail:'The assessment is conducted online and consists of questions designed to evaluate the learner\'s understanding of key concepts, tools, and best practices covered in the training.',
+        bullets:[
+          'Theory — multiple-choice questions covering core topics relevant to the training module',
+          'Attempts allowed — learners may attempt the assessment up to three times to achieve a passing score'
+        ]
+      },
+      id: {
+        intro:'Untuk menyelesaikan kursus dan memperoleh sertifikat digital, peserta harus lulus evaluasi akhir dengan skor minimal 75%, yang menunjukkan tingkat kemahiran yang dipersyaratkan.',
+        detail:'Evaluasi dilakukan secara online dan terdiri dari pertanyaan yang dirancang untuk menilai pemahaman peserta tentang konsep utama, alat, dan praktik terbaik yang dicakup dalam pelatihan.',
+        bullets:[
+          'Teori — pertanyaan pilihan ganda yang mencakup topik-topik inti yang relevan dengan modul pelatihan',
+          'Kesempatan percobaan — peserta diperbolehkan mencoba evaluasi hingga tiga kali untuk mencapai nilai kelulusan'
+        ]
+      }
     }
   },
 
@@ -792,425 +1054,1007 @@ const COURSES = [
   { 
     id:'ts-precast-fundamental', 
     category:'tekla-structures',
-    title:'Tekla Structures — Precast Fundamental Training', 
     eyebrow:'Tekla Structures',
-    skillLevel:'Fundamental', 
-    duration:'3 days', 
-    method:'Online (via Zoom) or Classroom',
-    lede: 'This instructor-led training course is open to Tekla Structures users based in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Precast Fundamental training course introduces learners to the core functionalities of Tekla Structures for precast projects, focusing on real-world workflows for structural modelling, precast detailing, drawing generation, and reporting.<br><br>Learners will gain hands-on experience using Tekla Structures to model, detail, and document precast concrete structures efficiently.',
-    contactNote: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
-    topics: [
-      'Introduction to Tekla Structures Precast – Overview of the software and its benefits for precast projects.',
-      'Part Creation and Modification – Creating precast elements and adjusting their properties.',
-      'Reinforcement and Detailing – Adding reinforcement, openings, and other details to precast parts.',
-      'Drawing Generation – Producing accurate 2D shop drawings from the 3D precast model.',
-      'Report Creation – Generating reports for fabrication and production planning.'
-    ],
-    outcomes: [
-      'Understand and apply the basic workflows of Tekla Structures for precast projects.',
-      'Create and modify precast elements efficiently.',
-      'Add reinforcement and details accurately to precast parts.',
-      'Generate shop drawings and reports from the 3D precast model.',
-      'Apply Tekla Structures skills to manage real-world precast projects effectively.'
-    ],
-    agenda: [
-      '<strong>Day 1: 3D Structure Fundamentals</strong><ul><li>Get acquainted with the Tekla Structures interface, basic tools, and navigation techniques for efficient precast modeling.</li><li>Learn how to customize the workspace and work plane to optimize the modeling process for precast structures</li><li>Understand the process of importing and managing reference files, such as architectural and structural drawings, to aid in model creation.</li><li>Creating and modifying precast parts</li></ul>',
-      '<strong>Day 2: Connections & Detailing</strong><ul><li>Explore various methods for cutting and modifying precast objects</li><li>Learn how to add and detail reinforcement within precast elements, Working with assemblies and batch editor</li><li>Utilizing system components and extensions</li><li>Develop skills in creating custom components to address specific project needs and design requirements</li></ul>',
-      '<strong>Day 3: Drawings & Report</strong><ul><li>Learn to generate comprehensive general arrangement drawings that illustrate the overall precast structure layout and design</li><li>Editing and refining drawings</li><li>Understand the process of assigning part numbers and creating detailed fabrication drawings for manufacturing and assembly.</li><li>Learn to extract and compile relevant data from the precast model to generate reports for material take-off</li></ul>'
-    ],
-    assessment: {
-      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
-      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
-      bullets:[
-        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+    title: {
+      en: 'Tekla Structures — Precast Fundamental Training',
+      id: 'Tekla Structures — Pelatihan Dasar Beton Pracetak (Precast)'
+    },
+    skillLevel: { en: 'Fundamental', id: 'Tingkat Dasar' },
+    duration: { en: '3 Days', id: '3 Hari' },
+    method: { en: 'Online or Classroom', id: 'Online (via Zoom) atau Tatap Muka' },
+    lede: {
+      en: 'This instructor-led training course is open to Tekla Structures users based in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Precast Fundamental training course introduces learners to the core functionalities of Tekla Structures for precast projects, focusing on real-world workflows for structural modelling, precast detailing, drawing generation, and reporting.<br><br>Learners will gain hands-on experience using Tekla Structures to model, detail, and document precast concrete structures efficiently.',
+      id: 'Kursus pelatihan berinstruktur ini terbuka untuk pengguna Tekla Structures yang berbasis di Indonesia. Dibawakan dalam Bahasa Indonesia, pelatihan Dasar Tekla Structures Precast selama 3 hari ini memperkenalkan peserta pada fungsi inti Tekla Structures untuk proyek beton pracetak, berfokus pada alur kerja nyata untuk pemodelan struktur, penulangan pracetak, pembuatan gambar kerja, dan pelaporan.<br><br>Peserta akan mendapatkan pengalaman langsung menggunakan Tekla Structures untuk memodelkan, mendetailkan, dan mendokumentasikan struktur beton pracetak secara efisien.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        'Introduction to Tekla Structures Precast – Overview of the software and its benefits for precast projects.',
+        'Part Creation and Modification – Creating precast elements and adjusting their properties.',
+        'Reinforcement and Detailing – Adding reinforcement, openings, and other details to precast parts.',
+        'Drawing Generation – Producing accurate 2D shop drawings from the 3D precast model.',
+        'Report Creation – Generating reports for fabrication and production planning.'
+      ],
+      id: [
+        'Pengenalan Tekla Structures Precast – Gambaran umum perangkat lunak dan manfaatnya untuk proyek pracetak.',
+        'Pembuatan dan Modifikasi Elemen – Membuat elemen pracetak dan menyesuaikan propertinya.',
+        'Penulangan dan Pendetailan – Menambahkan tulangan, bukaan, dan detail lainnya pada bagian pracetak.',
+        'Pembuatan Gambar Kerja – Menghasilkan gambar kerja 2D yang akurat dari model pracetak 3D.',
+        'Pembuatan Laporan – Menghasilkan laporan untuk fabrikasi dan perencanaan produksi.'
       ]
+    },
+    outcomes: {
+      en: [
+        'Understand and apply the basic workflows of Tekla Structures for precast projects.',
+        'Create and modify precast elements efficiently.',
+        'Add reinforcement and details accurately to precast parts.',
+        'Generate shop drawings and reports from the 3D precast model.',
+        'Apply Tekla Structures skills to manage real-world precast projects effectively.'
+      ],
+      id: [
+        'Memahami dan menerapkan alur kerja dasar Tekla Structures untuk proyek pracetak.',
+        'Membuat dan memodifikasi elemen pracetak secara efisien.',
+        'Menambahkan tulangan dan detail secara akurat pada elemen pracetak.',
+        'Menghasilkan gambar kerja (shop drawings) dan laporan dari model pracetak 3D.',
+        'Menerapkan keterampilan Tekla Structures untuk mengelola proyek pracetak nyata secara efektif.'
+      ]
+    },
+    agenda: {
+      en: [
+        '<strong>Day 1: 3D Structure Fundamentals</strong><ul><li>Get acquainted with the Tekla Structures interface, basic tools, and navigation techniques for efficient precast modeling.</li><li>Learn how to customize the workspace and work plane to optimize the modeling process for precast structures</li><li>Understand the process of importing and managing reference files, such as architectural and structural drawings, to aid in model creation.</li><li>Creating and modifying precast parts</li></ul>',
+        '<strong>Day 2: Connections & Detailing</strong><ul><li>Explore various methods for cutting and modifying precast objects</li><li>Learn how to add and detail reinforcement within precast elements, Working with assemblies and batch editor</li><li>Utilizing system components and extensions</li><li>Develop skills in creating custom components to address specific project needs and design requirements</li></ul>',
+        '<strong>Day 3: Drawings & Report</strong><ul><li>Learn to generate comprehensive general arrangement drawings that illustrate the overall precast structure layout and design</li><li>Editing and refining drawings</li><li>Understand the process of assigning part numbers and creating detailed fabrication drawings for manufacturing and assembly.</li><li>Learn to extract and compile relevant data from the precast model to generate reports for material take-off</li></ul>'
+      ],
+      id: [
+        '<strong>Hari 1: Dasar-dasar Struktur 3D</strong><ul><li>Mengenal antarmuka Tekla Structures, alat dasar, dan teknik navigasi untuk pemodelan pracetak yang efisien.</li><li>Pelajari cara menyesuaikan ruang kerja dan bidang kerja (work plane) untuk mengoptimalkan proses pemodelan struktur pracetak.</li><li>Memahami proses impor dan pengelolaan model referensi, seperti gambar arsitektur dan struktur, untuk membantu pembuatan model.</li><li>Membuat dan memodifikasi elemen pracetak.</li></ul>',
+        '<strong>Hari 2: Sambungan & Pendetailan</strong><ul><li>Mengeksplorasi berbagai metode untuk memotong dan memodifikasi objek pracetak.</li><li>Pelajari cara menambahkan dan mendetailkan tulangan pada elemen pracetak, Bekerja dengan assemblies dan batch editor.</li><li>Memanfaatkan komponen sistem dan plug-in.</li><li>Mengembangkan keterampilan dalam membuat komponen kustom untuk memenuhi kebutuhan proyek dan desain khusus.</li></ul>',
+        '<strong>Hari 3: Gambar Kerja & Laporan</strong><ul><li>Pelajari cara menghasilkan gambar denah umum (general arrangement) yang merinci tata letak dan desain struktur pracetak secara menyeluruh.</li><li>Mengecheck dan menyempurnakan gambar kerja.</li><li>Memahami proses penomoran bagian (part numbering) dan membuat gambar fabrikasi detail untuk manufaktur dan perakitan.</li><li>Pelajari cara mengekstrak dan menyusun data relevan dari model pracetak untuk menghasilkan laporan kebutuhan material (material take-off).</li></ul>'
+      ]
+    },
+    assessment: {
+      en: {
+        intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+        detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+        bullets:[
+          'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+        ]
+      },
+      id: {
+        intro:'Sertifikasi Profesional Tekla menawarkan ujian berbasis kinerja di mana peserta akan diuji sebagian besar pada keterampilan praktis dengan perangkat lunak Tekla.',
+        detail:'Melalui sistem ini, peserta dapat diukur secara akurat berdasarkan keterampilan aplikasi daripada pengetahuan teoritis.',
+        bullets:[
+          'Setelah menyelesaikan kursus ini, setiap peserta berhak mengikuti satu kali ujian Sertifikasi Profesional Tekla Structures secara gratis.'
+        ]
+      }
     }
   },
   { 
     id:'ts-steel-concrete-fundamental', 
     category:'tekla-structures',
-    title:'Tekla Structures — Steel & Concrete Fundamental Training', 
     eyebrow:'Tekla Structures',
-    skillLevel:'Fundamental', 
-    duration:'3 days', 
-    method:'Online (via Zoom) or Classroom',
-    lede: 'This instructor-led BIM-based training course is offered exclusively to Tekla Structures users in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Steel & Concrete Fundamental training course introduces learners to the core functionalities of Tekla Structures for steel and concrete projects, focusing on real-world workflows for structural modeling, detailing, drawing generation, and reporting.<br><br>Learners will gain hands-on experience using Tekla Structures to model, detail, and document steel and concrete structures efficiently. The course emphasizes the practical application of default settings to handle actual project scenarios.',
-    contactNote: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
-    topics: [
-      'Basic Working Methods – Familiarization with core Tekla Structures workflows',
-      'Part Creation & Modification – Creating steel and concrete elements and adjusting their properties',
-      'Connections, Rebars & Detailing – Adding connections, reinforcement, and other details to parts',
-      'Drawing Generation – Producing accurate 2D drawings from 3D models',
-      'Report Creation – Generating reports from 3D models for fabrication and project documentation'
-    ],
-    outcomes: [
-      'Apply fundamental workflows of Tekla Structures for steel and concrete projects',
-      'Create and modify steel and concrete parts effectively',
-      'Add connections, rebars, and details accurately to parts',
-      'Generate shop drawings and reports from 3D models',
-      'Apply Tekla Structures skills to manage real-world projects efficiently'
-    ],
-    agenda: [
-      '<strong>Day 1: 3D Structure Fundamentals</strong><ul><li>Get acquainted with the Tekla Structures interface, basic tools, and navigation techniques for efficient modeling of steel and concrete structures.</li><li>Learn how to customize the workspace and work plane to optimize the modeling process for both steel and concrete elements.</li><li>Understand the process of importing and managing reference files, such as architectural and structural drawings, to aid in model creation.</li><li>Creating and modifying both steel and concrete parts</li></ul>',
-      '<strong>Day 2: Connections & Detail Mastery</strong><ul><li>Explore various methods for cutting steel and concrete objects</li><li>Learn how to add and detail connections, including welds, bolts for steel, and reinforcement for concrete</li><li>Utilizing system components and extensions</li><li>Develop skills in creating custom components</li></ul>',
-      '<strong>Day 3: Drawings & Report</strong><ul><li>Learn to generate comprehensive general arrangement drawings</li><li>Editing and refining drawings</li><li>Understand the process of assigning part numbers and creating detailed fabrication drawings for manufacturing and assembly.</li><li>Learn to extract and compile relevant data from the model to generate reports for material take-off</li></ul>'
-    ],
-    assessment: {
-      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
-      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
-      bullets:[
-        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+    title: {
+      en: 'Tekla Structures — Steel & Concrete Fundamental Training',
+      id: 'Tekla Structures — Pelatihan Dasar Baja & Beton'
+    },
+    skillLevel: { en: 'Fundamental', id: 'Tingkat Dasar' },
+    duration: { en: '3 Days', id: '3 Hari' },
+    method: { en: 'Online or Classroom', id: 'Online (via Zoom) atau Tatap Muka' },
+    lede: {
+      en: 'This instructor-led BIM-based training course is offered exclusively to Tekla Structures users in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Steel & Concrete Fundamental training course introduces learners to the core functionalities of Tekla Structures for steel and concrete projects, focusing on real-world workflows for structural modeling, detailing, drawing generation, and reporting.<br><br>Learners will gain hands-on experience using Tekla Structures to model, detail, and document steel and concrete structures efficiently. The course emphasizes the practical application of default settings to handle actual project scenarios.',
+      id: 'Kursus pelatihan berbasis BIM dengan instruktur ini ditawarkan secara eksklusif kepada pengguna Tekla Structures di Indonesia. Dibawakan dalam Bahasa Indonesia, pelatihan Dasar Baja & Beton Tekla Structures selama 3 hari ini memperkenalkan peserta pada fungsi inti Tekla Structures untuk proyek baja dan beton, berfokus pada alur kerja nyata untuk pemodelan struktur, pendetailan, pembuatan gambar, dan pelaporan.<br><br>Peserta akan mendapatkan pengalaman praktis menggunakan Tekla Structures untuk memodelkan, mendetailkan, dan mendokumentasikan struktur baja dan beton secara efisien. Kursus ini menekankan penerapan praktis pengaturan standar untuk menangani skenario proyek nyata.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        'Basic Working Methods – Familiarization with core Tekla Structures workflows',
+        'Part Creation & Modification – Creating steel and concrete elements and adjusting their properties',
+        'Connections, Rebars & Detailing – Adding connections, reinforcement, and other details to parts',
+        'Drawing Generation – Producing accurate 2D drawings from 3D models',
+        'Report Creation – Generating reports from 3D models for fabrication and project documentation'
+      ],
+      id: [
+        'Metode Kerja Dasar – Pengenalan alur kerja inti Tekla Structures',
+        'Pembuatan & Modifikasi Elemen – Membuat elemen baja dan beton serta menyesuaikan propertinya',
+        'Sambungan, Tulangan & Pendetailan – Menambahkan sambungan, tulangan, dan detail lainnya pada elemen',
+        'Pembuatan Gambar Kerja – Menghasilkan gambar 2D yang akurat dari model 3D',
+        'Pembuatan Laporan – Menghasilkan laporan dari model 3D untuk fabrikasi dan dokumentasi proyek'
       ]
+    },
+    outcomes: {
+      en: [
+        'Apply fundamental workflows of Tekla Structures for steel and concrete projects',
+        'Create and modify steel and concrete parts effectively',
+        'Add connections, rebars, and details accurately to parts',
+        'Generate shop drawings and reports from 3D models',
+        'Apply Tekla Structures skills to manage real-world projects efficiently'
+      ],
+      id: [
+        'Menerapkan alur kerja dasar Tekla Structures untuk proyek baja dan beton',
+        'Membuat dan memodifikasi elemen baja dan beton secara efektif',
+        'Menambahkan sambungan, tulangan, dan detail secara akurat pada elemen',
+        'Menghasilkan gambar kerja dan laporan dari model 3D',
+        'Menerapkan keterampilan Tekla Structures untuk mengelola proyek nyata secara efisien'
+      ]
+    },
+    agenda: {
+      en: [
+        '<strong>Day 1: 3D Structure Fundamentals</strong><ul><li>Get acquainted with the Tekla Structures interface, basic tools, and navigation techniques for efficient modeling of steel and concrete structures.</li><li>Learn how to customize the workspace and work plane to optimize the modeling process for both steel and concrete elements.</li><li>Understand the process of importing and managing reference files, such as architectural and structural drawings, to aid in model creation.</li><li>Creating and modifying both steel and concrete parts</li></ul>',
+        '<strong>Day 2: Connections & Detail Mastery</strong><ul><li>Explore various methods for cutting steel and concrete objects</li><li>Learn how to add and detail connections, including welds, bolts for steel, and reinforcement for concrete</li><li>Utilizing system components and extensions</li><li>Develop skills in creating custom components</li></ul>',
+        '<strong>Day 3: Drawings & Report</strong><ul><li>Learn to generate comprehensive general arrangement drawings</li><li>Editing and refining drawings</li><li>Understand the process of assigning part numbers and creating detailed fabrication drawings for manufacturing and assembly.</li><li>Learn to extract and compile relevant data from the model to generate reports for material take-off</li></ul>'
+      ],
+      id: [
+        '<strong>Hari 1: Dasar-dasar Struktur 3D</strong><ul><li>Mengenal antarmuka Tekla Structures, alat dasar, dan teknik navigasi untuk pemodelan struktur baja dan beton yang efisien.</li><li>Pelajari cara menyesuaikan ruang kerja dan bidang kerja untuk mengoptimalkan proses pemodelan elemen baja dan beton.</li><li>Memahami proses impor dan pengelolaan model referensi, seperti gambar arsitektur dan struktur.</li><li>Membuat dan memodifikasi elemen baja dan beton.</li></ul>',
+        '<strong>Hari 2: Sambungan & Penguasaan Detail</strong><ul><li>Mengeksplorasi berbagai metode pemotongan objek baja dan beton.</li><li>Pelajari cara menambahkan dan mendetailkan sambungan, termasuk las, baut untuk baja, dan penulangan untuk beton.</li><li>Memanfaatkan komponen sistem dan plug-in.</li><li>Mengembangkan keterampilan dalam membuat komponen kustom (custom components).</li></ul>',
+        '<strong>Hari 3: Gambar Kerja & Laporan</strong><ul><li>Pelajari cara menghasilkan gambar denah umum (general arrangement) yang komprehensif.</li><li>Mengedit dan menyempurnakan gambar kerja.</li><li>Memahami proses penomoran bagian dan membuat gambar fabrikasi detail untuk manufaktur dan perakitan.</li><li>Pelajari cara mengekstrak dan menyusun data relevan dari model untuk menghasilkan laporan kebutuhan material.</li></ul>'
+      ]
+    },
+    assessment: {
+      en: {
+        intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+        detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+        bullets:[
+          'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+        ]
+      },
+      id: {
+        intro:'Sertifikasi Profesional Tekla menawarkan ujian berbasis kinerja di mana peserta akan diuji sebagian besar pada keterampilan praktis dengan perangkat lunak Tekla.',
+        detail:'Melalui sistem ini, peserta dapat diukur secara akurat berdasarkan keterampilan aplikasi daripada pengetahuan teoritis.',
+        bullets:[
+          'Setelah menyelesaikan kursus ini, setiap peserta berhak mengikuti satu kali ujian Sertifikasi Profesional Tekla Structures secara gratis.'
+        ]
+      }
     }
   },
   { 
     id:'ts-steel-fundamental', 
     category:'tekla-structures',
-    title:'Tekla Structures — Steel Fundamental Training', 
     eyebrow:'Tekla Structures',
-    skillLevel:'Fundamental', 
-    duration:'3 days', 
-    method:'Online (via Zoom) or Classroom',
-    lede: 'This instructor-led BIM-based training course is offered exclusively to Tekla Structures users in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Steel Fundamental training course introduces learners to the core functionalities of Tekla Structures for steel projects, focusing on real-world workflows for structural modeling, detailing, drawing generation, and reporting.<br><br>Learners will gain hands-on experience using Tekla Structures to model, detail, and document steel structures efficiently. The course emphasizes the practical application of default settings to handle actual project scenarios.',
-    contactNote: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
-    topics: [
-      'Basic Working Methods – Familiarization with core Tekla Structures workflows',
-      'Part Creation & Modification – Creating steel elements and adjusting their properties',
-      'Connections & Detailing – Adding connections, bolts, and other details to parts',
-      'Drawing Generation – Producing accurate 2D shop drawings from the 3D models',
-      'Report Creation – Generating reports from 3D models for fabrication and documentation'
-    ],
-    outcomes: [
-      'Apply fundamental workflows of Tekla Structures in steel projects',
-      'Create and modify steel parts effectively',
-      'Add connections and details accurately to steel components',
-      'Generate shop drawings from 3D steel models',
-      'Produce reports to support fabrication and project management'
-    ],
-    agenda: [
-      '<strong>Day 1: 3D Structure Fundamentals</strong><ul><li>Get acquainted with the Tekla Structures interface, basic tools, and navigation techniques for efficient steel detailing.</li><li>Learn how to customize the workspace and work plane to optimize the modeling process for steel structures.</li><li>Understand the process of importing and managing reference files, such as architectural and structural drawings, to aid in model creation.</li><li>Master the techniques for creating and modifying various steel structures</li></ul>',
-      '<strong>Day 2: Connections & Detail Mastery</strong><ul><li>Explore various methods for cutting</li><li>Learn how to add and detail connections, including welds and bolts.</li><li>Understand how to manage assemblies and utilize the batch editor for efficient modification.</li><li>Utilizing system components and extensions</li><li>Develop skills in creating custom components to address specific project needs and design requirements</li></ul>',
-      '<strong>Day 3: Drawings & Reports</strong><ul><li>Creating professional general arrangement drawings to industry standards</li><li>Understand the process of assigning part numbers</li><li>Develop skills in modifying and enhancing drawings to meet specific presentation and documentation standards</li><li>Learn to extract and compile relevant data from the steel model to generate reports for material take-off</li></ul>'
-    ],
-    assessment: {
-      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
-      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
-      bullets:[
-        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+    title: {
+      en: 'Tekla Structures — Steel Fundamental Training',
+      id: 'Tekla Structures — Pelatihan Dasar Struktur Baja'
+    },
+    skillLevel: { en: 'Fundamental', id: 'Tingkat Dasar' },
+    duration: { en: '3 Days', id: '3 Hari' },
+    method: { en: 'Online or Classroom', id: 'Online (via Zoom) atau Tatap Muka' },
+    lede: {
+      en: 'This instructor-led BIM-based training course is offered exclusively to Tekla Structures users in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Steel Fundamental training course introduces learners to the core functionalities of Tekla Structures for steel projects, focusing on real-world workflows for structural modeling, detailing, drawing generation, and reporting.<br><br>Learners will gain hands-on experience using Tekla Structures to model, detail, and document steel structures efficiently. The course emphasizes the practical application of default settings to handle actual project scenarios.',
+      id: 'Pelatihan berbasis BIM berinstruktur ini ditawarkan secara eksklusif kepada pengguna Tekla Structures di Indonesia. Dibawakan dalam Bahasa Indonesia, pelatihan Dasar Struktur Baja Tekla Structures selama 3 hari ini memperkenalkan fungsi inti Tekla Structures untuk proyek baja, berfokus pada alur kerja nyata untuk pemodelan struktur, pendetailan, pembuatan gambar kerja, dan pelaporan.<br><br>Peserta akan mendapatkan pengalaman langsung menggunakan Tekla Structures untuk memodelkan, mendetailkan, dan mendokumentasikan struktur baja secara efisien. Kursus ini menekankan penerapan praktis pengaturan standar untuk menangani skenario proyek nyata.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        'Basic Working Methods – Familiarization with core Tekla Structures workflows',
+        'Part Creation & Modification – Creating steel elements and adjusting their properties',
+        'Connections & Detailing – Adding connections, bolts, and other details to parts',
+        'Drawing Generation – Producing accurate 2D shop drawings from the 3D models',
+        'Report Creation – Generating reports from 3D models for fabrication and documentation'
+      ],
+      id: [
+        'Metode Kerja Dasar – Pengenalan alur kerja inti Tekla Structures',
+        'Pembuatan & Modifikasi Elemen – Membuat elemen baja dan menyesuaikan propertinya',
+        'Sambungan & Pendetailan – Menambahkan sambungan, baut, dan detail lainnya pada elemen',
+        'Pembuatan Gambar Kerja – Menghasilkan gambar kerja (shop drawings) 2D yang akurat dari model 3D',
+        'Pembuatan Laporan – Menghasilkan laporan dari model 3D untuk fabrikasi dan dokumentasi'
       ]
+    },
+    outcomes: {
+      en: [
+        'Apply fundamental workflows of Tekla Structures in steel projects',
+        'Create and modify steel parts effectively',
+        'Add connections and details accurately to steel components',
+        'Generate shop drawings from 3D steel models',
+        'Produce reports to support fabrication and project management'
+      ],
+      id: [
+        'Menerapkan alur kerja dasar Tekla Structures dalam proyek baja',
+        'Membuat dan memodifikasi komponen baja secara efektif',
+        'Menambahkan sambungan dan detail secara akurat pada komponen baja',
+        'Menghasilkan gambar kerja dari model baja 3D',
+        'Menghasilkan laporan untuk mendukung fabrikasi dan manajemen proyek'
+      ]
+    },
+    agenda: {
+      en: [
+        '<strong>Day 1: 3D Structure Fundamentals</strong><ul><li>Get acquainted with the Tekla Structures interface, basic tools, and navigation techniques for efficient steel detailing.</li><li>Learn how to customize the workspace and work plane to optimize the modeling process for steel structures.</li><li>Understand the process of importing and managing reference files, such as architectural and structural drawings, to aid in model creation.</li><li>Master the techniques for creating and modifying various steel structures</li></ul>',
+        '<strong>Day 2: Connections & Detail Mastery</strong><ul><li>Explore various methods for cutting</li><li>Learn how to add and detail connections, including welds and bolts.</li><li>Understand how to manage assemblies and utilize the batch editor for efficient modification.</li><li>Utilizing system components and extensions</li><li>Develop skills in creating custom components to address specific project needs and design requirements</li></ul>',
+        '<strong>Day 3: Drawings & Reports</strong><ul><li>Creating professional general arrangement drawings to industry standards</li><li>Understand the process of assigning part numbers</li><li>Develop skills in modifying and enhancing drawings to meet specific presentation and documentation standards</li><li>Learn to extract and compile relevant data from the steel model to generate reports for material take-off</li></ul>'
+      ],
+      id: [
+        '<strong>Hari 1: Dasar-dasar Struktur 3D</strong><ul><li>Mengenal antarmuka Tekla Structures, alat dasar, dan teknik navigasi untuk pendetailan baja yang efisien.</li><li>Pelajari cara menyesuaikan ruang kerja dan bidang kerja untuk mengoptimalkan proses pemodelan struktur baja.</li><li>Memahami proses impor dan pengelolaan model referensi untuk membantu pembuatan model.</li><li>Menguasai teknik membuat dan memodifikasi berbagai struktur baja.</li></ul>',
+        '<strong>Hari 2: Sambungan & Penguasaan Detail</strong><ul><li>Mengeksplorasi berbagai metode pemotongan objek.</li><li>Pelajari cara menambahkan dan mendetailkan sambungan, termasuk las dan baut.</li><li>Memahami cara mengelola assemblies dan menggunakan batch editor untuk modifikasi yang efisien.</li><li>Memanfaatkan komponen sistem dan plug-in.</li><li>Mengembangkan keterampilan dalam membuat komponen kustom untuk kebutuhan proyek khusus.</li></ul>',
+        '<strong>Hari 3: Gambar Kerja & Laporan</strong><ul><li>Membuat gambar denah umum profesional sesuai standar industri.</li><li>Memahami proses penomoran bagian.</li><li>Mengembangkan keterampilan dalam memodifikasi dan meningkatkan kualitas gambar agar memenuhi standar presentasi dan dokumentasi.</li><li>Pelajari cara mengekstrak data dari model baja untuk laporan kebutuhan material.</li></ul>'
+      ]
+    },
+    assessment: {
+      en: {
+        intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+        detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+        bullets:[
+          'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+        ]
+      },
+      id: {
+        intro:'Sertifikasi Profesional Tekla menawarkan ujian berbasis kinerja di mana peserta akan diuji sebagian besar pada keterampilan praktis dengan perangkat lunak Tekla.',
+        detail:'Melalui sistem ini, peserta dapat diukur secara akurat berdasarkan keterampilan aplikasi daripada pengetahuan teoritis.',
+        bullets:[
+          'Setelah menyelesaikan kursus ini, setiap peserta berhak mengikuti satu kali ujian Sertifikasi Profesional Tekla Structures secara gratis.'
+        ]
+      }
     }
   },
   { 
     id:'ts-advanced', 
     category:'tekla-structures',
-    title:'Tekla Structures — Advanced Training', 
     eyebrow:'Tekla Structures',
-    skillLevel:'Advanced', 
-    prerequisite:'<ul><li>Fundamental skills in Tekla Structures</li></ul>',
-    duration:'3 days', 
-    method:'Online (via Zoom) or Classroom',
-    lede: 'This instructor-led, BIM-based training is open exclusively to Tekla Structures users in Malaysia and Singapore. Conducted in English, the Tekla Structures Advanced Training is designed for experienced users who want to master advanced techniques for modifying default settings to suit specific project requirements.<br><br>This training equips learners with advanced skills to customize Tekla Structures and optimize project workflows.',
-    contactNote: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
-    topics: [
-      'Setting up company- and project-specific requirements',
-      'Adding custom connection libraries and profiles',
-      'Creating additional reports and drawing templates',
-      'Modifying drawing layouts and property settings'
-    ],
-    outcomes: [
-      'Configure Tekla Structures to meet company and project-specific standards',
-      'Implement custom connection libraries and profiles for advanced modeling',
-      'Create tailored reports and drawing templates',
-      'Adjust drawing layouts and properties to align with project needs'
-    ],
-    agenda: [
-      '<strong>Day 1: Parametric Custom Components</strong><ul><li>Creating custom parts</li><li>Developing custom details</li><li>Creation of custom connections with predefined rules</li><li>Modifying the dialog boxes of custom components</li><li>Configuring auto connection rules</li></ul>',
-      '<strong>Day 2: Data & System Customization</strong><ul><li>Defining and creating custom user defined attributes (UDA)</li><li>Manage model using phase manager</li><li>Utilizing organizer tool</li><li>Creation of custom profile</li></ul>',
-      '<strong>Day 3: Model Template & Administration</strong><ul><li>Customizing drawing title blocks and revision templates</li><li>Customizing drawing material report templates</li><li>Integrating title blocks and material reports into drawing layouts</li><li>Setting up drawing object level properties</li><li>Customizing model templates</li><li>Managing company-specific settings by firm folder</li></ul>'
-    ],
-    assessment: {
-      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
-      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
-      bullets:[
-        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+    title: {
+      en: 'Tekla Structures — Advanced Training',
+      id: 'Tekla Structures — Pelatihan Tingkat Lanjut (Advanced)'
+    },
+    skillLevel: { en: 'Advanced', id: 'Tingkat Lanjut' },
+    prerequisite: { 
+      en: '<ul><li>Fundamental skills in Tekla Structures</li></ul>', 
+      id: '<ul><li>Keterampilan dasar dalam penggunaan Tekla Structures</li></ul>' 
+    },
+    duration: { en: '3 Days', id: '3 Hari' },
+    method: { en: 'Online or Classroom', id: 'Online (via Zoom) atau Tatap Muka' },
+    lede: {
+      en: 'This instructor-led, BIM-based training is open exclusively to Tekla Structures users in Malaysia and Singapore. Conducted in English, the Tekla Structures Advanced Training is designed for experienced users who want to master advanced techniques for modifying default settings to suit specific project requirements.<br><br>This training equips learners with advanced skills to customize Tekla Structures and optimize project workflows.',
+      id: 'Pelatihan berbasis BIM berinstruktur ini terbuka secara eksklusif bagi pengguna Tekla Structures di Indonesia. Diselenggarakan dalam Bahasa Indonesia, Pelatihan Tingkat Lanjut Tekla Structures dirancang untuk pengguna berpengalaman yang ingin menguasai teknik tingkat lanjut dalam menyesuaikan pengaturan standar sesuai kebutuhan spesifik proyek.<br><br>Pelatihan ini membekali peserta dengan keterampilan lanjutan untuk mengkustomisasi Tekla Structures dan mengoptimalkan alur kerja proyek.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        'Setting up company- and project-specific requirements',
+        'Adding custom connection libraries and profiles',
+        'Creating additional reports and drawing templates',
+        'Modifying drawing layouts and property settings'
+      ],
+      id: [
+        'Pengaturan standar khusus perusahaan dan proyek',
+        'Menambahkan komponen dan profil kustom',
+        'Membuat laporan tambahan dan templat gambar',
+        'Memodifikasi tata letak gambar (drawing layouts) dan pengaturan properti'
       ]
+    },
+    outcomes: {
+      en: [
+        'Configure Tekla Structures to meet company and project-specific standards',
+        'Implement custom connection libraries and profiles for advanced modeling',
+        'Create tailored reports and drawing templates',
+        'Adjust drawing layouts and properties to align with project needs'
+      ],
+      id: [
+        'Mengonfigurasi Tekla Structures untuk memenuhi standar khusus perusahaan dan proyek',
+        'Menerapkan library koneksi kustom dan profil untuk pemodelan tingkat lanjut',
+        'Membuat laporan kustom dan templat gambar yang disesuaikan',
+        'Menyesuaikan tata letak gambar dan properti agar selaras dengan kebutuhan proyek'
+      ]
+    },
+    agenda: {
+      en: [
+        '<strong>Day 1: Parametric Custom Components</strong><ul><li>Creating custom parts</li><li>Developing custom details</li><li>Creation of custom connections with predefined rules</li><li>Modifying the dialog boxes of custom components</li><li>Configuring auto connection rules</li></ul>',
+        '<strong>Day 2: Data & System Customization</strong><ul><li>Defining and creating custom user defined attributes (UDA)</li><li>Manage model using phase manager</li><li>Utilizing organizer tool</li><li>Creation of custom profile</li></ul>',
+        '<strong>Day 3: Model Template & Administration</strong><ul><li>Customizing drawing title blocks and revision templates</li><li>Customizing drawing material report templates</li><li>Integrating title blocks and material reports into drawing layouts</li><li>Setting up drawing object level properties</li><li>Customizing model templates</li><li>Managing company-specific settings by firm folder</li></ul>'
+      ],
+      id: [
+        '<strong>Hari 1: Komponen Kustom Parametrik</strong><ul><li>Membuat bagian/elemen kustom (custom parts)</li><li>Mengembangkan detail kustom (custom details)</li><li>Membuat sambungan kustom dengan aturan terdefinisi</li><li>Memodifikasi dialog box pada komponen kustom</li><li>Mengonfigurasi aturan sambungan otomatis (auto connection)</li></ul>',
+        '<strong>Hari 2: Kustomisasi Data & Sistem</strong><ul><li>Mendefinisikan dan membuat atribut khusus pengguna (User Defined Attributes / UDA)</li><li>Mengelola model menggunakan Phase Manager</li><li>Memanfaatkan Model Organizer</li><li>Membuat profil kustom</li></ul>',
+        '<strong>Hari 3: Templat Model & Administrasi Sistem</strong><ul><li>Mengkustomisasi kop gambar (title block) dan templat revisi</li><li>Mengkustomisasi templat laporan material pada gambar</li><li>Mengkombinasikan kop gambar dan laporan material ke dalam tata letak gambar</li><li>Mengatur properti tingkat objek gambar (object-level properties)</li><li>Mengkustomisasi templat model</li><li>Mengelola pengaturan khusus perusahaan melalui folder firm (FIRM folder)</li></ul>'
+      ]
+    },
+    assessment: {
+      en: {
+        intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+        detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+        bullets:[
+          'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+        ]
+      },
+      id: {
+        intro:'Sertifikasi Profesional Tekla menawarkan ujian berbasis kinerja di mana peserta akan diuji sebagian besar pada keterampilan praktis dengan perangkat lunak Tekla.',
+        detail:'Melalui sistem ini, peserta dapat diukur secara akurat berdasarkan keterampilan aplikasi daripada pengetahuan teoritis.',
+        bullets:[
+          'Setelah menyelesaikan kursus ini, setiap peserta berhak mengikuti satu kali ujian Sertifikasi Profesional Tekla Structures secara gratis.'
+        ]
+      }
     }
   },
   { 
     id:'ts-steel-fundamental-offshore', 
     category:'tekla-structures',
-    title:'Tekla Structures — Steel Fundamental, Offshore Training', 
     eyebrow:'Tekla Structures',
-    skillLevel:'Fundamental', 
-    duration:'4 days', 
-    method:'Online (via Zoom) or Classroom',
-    lede: 'This instructor-led Tekla Structures Offshore Fundamental Training is open to Tekla Structures users in Malaysia and Singapore only. Conducted in English, this specialized 4-day training course focuses on equipping learners with the knowledge and skills to effectively utilize Tekla Structures for modeling and detailing offshore steel structures.<br><br>This course emphasizes practical application through hands-on software usage, interactive knowledge sharing, audio-video materials, and engaging skill practice exercises to enhance the learning experience.',
-    contactNote: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
-    topics: [
-      '3D structure fundamentals',
-      'Connections and detailings',
-      'Drawings and Reports'
-    ],
-    outcomes: [
-      'Understand and apply the basic working methods in Tekla Structures',
-      'Model offshore steel structures effectively',
-      'Add appropriate connections and detailing to model components',
-      'Generate layout and production drawings',
-      'Produce detailed reports from 3D offshore models'
-    ],
-    agenda: [
-      '<strong>Day 1: 3D Structure Fundamentals</strong><ul><li>Get acquainted with the Tekla Structures interface, basic tools, and navigation techniques for efficient modeling of offshore steel structures.</li><li>Learn how to customize the workspace and work plane to optimize the modeling process for steel offshore structures</li><li>Understand the process of importing and managing reference files.</li><li>Creating and modifying offshore steel parts</li></ul>',
-      '<strong>Day 2 & 3: Connections & Detailing</strong><ul><li>Explore various methods for cutting and modifying steel objects to achieve complex shapes and connections typical in offshore structures</li><li>Learn how to add and detail connections, including welds and bolts</li><li>Understand how to manage assemblies and utilize the batch editor for efficient modification</li><li>Utilizing system components and extensions</li><li>Develop skills in creating custom components to address specific project needs and design requirements</li></ul>',
-      '<strong>Day 4: Drawings & Report</strong><ul><li>Creating professional general arrangement drawings to industry standards</li><li>Develop skills in modifying and enhancing drawings to meet specific presentation and documentation standards</li><li>Master the procedures for printing and exporting drawings in various formats for collaboration and sharing</li><li>Learn to extract and compile relevant data from the steel offshore model to generate reports for material take-off</li></ul>'
-    ],
-    assessment: {
-      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
-      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
-      bullets:[
-        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+    title: {
+      en: 'Tekla Structures — Steel Fundamental, Offshore Training',
+      id: 'Tekla Structures — Pelatihan Dasar Baja Struktur Lepas Pantai (Offshore)'
+    },
+    skillLevel: { en: 'Fundamental', id: 'Tingkat Dasar' },
+    duration: { en: '4 Days', id: '4 Hari' },
+    method: { en: 'Online or Classroom', id: 'Online (via Zoom) atau Tatap Muka' },
+    lede: {
+      en: 'This instructor-led Tekla Structures Offshore Fundamental Training is open to Tekla Structures users in Malaysia and Singapore only. Conducted in English, this specialized 4-day training course focuses on equipping learners with the knowledge and skills to effectively utilize Tekla Structures for modeling and detailing offshore steel structures.<br><br>This course emphasizes practical application through hands-on software usage, interactive knowledge sharing, audio-video materials, and engaging skill practice exercises to enhance the learning experience.',
+      id: 'Pelatihan Dasar Tekla Structures Offshore berinstruktur ini terbuka untuk pengguna Tekla Structures di Indonesia. Dibawakan dalam Bahasa Indonesia, kursus pelatihan khusus selama 4 hari ini berfokus untuk membekali peserta dengan pengetahuan dan keterampilan untuk memanfaatkan Tekla Structures secara efektif dalam pemodelan dan pendetailan struktur baja lepas pantai (offshore).<br><br>Kursus ini menekankan penerapan praktis melalui penggunaan perangkat lunak secara langsung, berbagi pengetahuan interaktif, materi audio-video, dan latihan praktik keterampilan yang menarik.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        '3D structure fundamentals',
+        'Connections and detailings',
+        'Drawings and Reports'
+      ],
+      id: [
+        'Dasar-dasar struktur 3D lepas pantai',
+        'Sambungan dan pendetailan',
+        'Gambar Kerja dan Laporan'
       ]
+    },
+    outcomes: {
+      en: [
+        'Understand and apply the basic working methods in Tekla Structures',
+        'Model offshore steel structures effectively',
+        'Add appropriate connections and detailing to model components',
+        'Generate layout and production drawings',
+        'Produce detailed reports from 3D offshore models'
+      ],
+      id: [
+        'Memahami dan menerapkan metode kerja dasar di Tekla Structures',
+        'Memodelkan struktur baja lepas pantai secara efektif',
+        'Menambahkan sambungan dan detail yang tepat pada komponen model',
+        'Menghasilkan gambar tata letak dan gambar produksi',
+        'Menghasilkan laporan rinci dari model baja 3D lepas pantai'
+      ]
+    },
+    agenda: {
+      en: [
+        '<strong>Day 1: 3D Structure Fundamentals</strong><ul><li>Get acquainted with the Tekla Structures interface, basic tools, and navigation techniques for efficient modeling of offshore steel structures.</li><li>Learn how to customize the workspace and work plane to optimize the modeling process for steel offshore structures</li><li>Understand the process of importing and managing reference files.</li><li>Creating and modifying offshore steel parts</li></ul>',
+        '<strong>Day 2 & 3: Connections & Detailing</strong><ul><li>Explore various methods for cutting and modifying steel objects to achieve complex shapes and connections typical in offshore structures</li><li>Learn how to add and detail connections, including welds and bolts</li><li>Understand how to manage assemblies and utilize the batch editor for efficient modification</li><li>Utilizing system components and extensions</li><li>Develop skills in creating custom components to address specific project needs and design requirements</li></ul>',
+        '<strong>Day 4: Drawings & Report</strong><ul><li>Creating professional general arrangement drawings to industry standards</li><li>Develop skills in modifying and enhancing drawings to meet specific presentation and documentation standards</li><li>Master the procedures for printing and exporting drawings in various formats for collaboration and sharing</li><li>Learn to extract and compile relevant data from the steel offshore model to generate reports for material take-off</li></ul>'
+      ],
+      id: [
+        '<strong>Hari 1: Dasar-dasar Struktur 3D</strong><ul><li>Mengenal antarmuka Tekla Structures, alat dasar, dan teknik navigasi untuk pemodelan struktur baja lepas pantai.</li><li>Pelajari cara menyesuaikan ruang kerja dan bidang kerja untuk mengoptimalkan proses pemodelan.</li><li>Memahami proses impor dan pengelolaan model referensi.</li><li>Membuat dan memodifikasi komponen baja lepas pantai.</li></ul>',
+        '<strong>Hari 2 & 3: Sambungan & Pendetailan</strong><ul><li>Mengeksplorasi berbagai metode pemotongan dan modifikasi objek baja untuk mencapai bentuk kompleks dan sambungan khas struktur lepas pantai.</li><li>Pelajari cara menambahkan dan mendetailkan sambungan, termasuk las dan baut.</li><li>Memahami cara mengelola assemblies dan menggunakan batch editor.</li><li>Memanfaatkan komponen sistem dan plug-in.</li><li>Mengembangkan keterampilan membuat komponen kustom untuk kebutuhan proyek lepas pantai.</li></ul>',
+        '<strong>Hari 4: Gambar Kerja & Laporan</strong><ul><li>Membuat gambar denah umum profesional sesuai standar industri.</li><li>Mengembangkan keterampilan dalam memodifikasi gambar agar memenuhi standar dokumentasi.</li><li>Menguasai prosedur pencetakan dan ekspor gambar dalam berbagai format.</li><li>Pelajari cara mengekstrak data dari model untuk menghasilkan laporan kebutuhan material.</li></ul>'
+      ]
+    },
+    assessment: {
+      en: {
+        intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+        detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+        bullets:[
+          'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+        ]
+      },
+      id: {
+        intro:'Sertifikasi Profesional Tekla menawarkan ujian berbasis kinerja di mana peserta akan diuji sebagian besar pada keterampilan praktis dengan perangkat lunak Tekla.',
+        detail:'Melalui sistem ini, peserta dapat diukur secara akurat berdasarkan keterampilan aplikasi daripada pengetahuan teoritis.',
+        bullets:[
+          'Setelah menyelesaikan kursus ini, setiap peserta berhak mengikuti satu kali ujian Sertifikasi Profesional Tekla Structures secara gratis.'
+        ]
+      }
     }
   },
   { 
     id:'ts-steel-advanced-offshore', 
     category:'tekla-structures',
-    title:'Tekla Structures — Steel Advanced, Offshore Training', 
     eyebrow:'Tekla Structures',
-    skillLevel:'Advanced', 
-    prerequisite:'<ul><li>Fundamental skills in Tekla Structures</li></ul>',
-    duration:'3 days', 
-    method:'Online (via Zoom) or Classroom',
-    lede: 'This instructor-led training course is open to Tekla Structures users based in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Offshore Advanced training is designed for experienced users who want to customize and optimize their Tekla Structures environment for maximum efficiency and productivity in offshore steel projects.<br><br>Learners will apply their skills in complex project settings, focusing on advanced modeling, detailing, and integration workflows relevant to offshore structures.',
-    contactNote: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
-    topics: [
-      'Customizing drawing templates and reports for company standards',
-      'Developing parametric custom components for complex offshore structures',
-      'Configuring model templates and managing company-specific settings',
-      'Tekla–E3D & S3D integration workflows'
-    ],
-    outcomes: [
-      'Customize drawing and reporting tools for project-specific requirements',
-      'Build parametric components to automate repetitive modeling tasks',
-      'Configure and standardize project environments using model templates',
-      'Integrate Tekla Structures with E3D and S3D for efficient offshore workflows'
-    ],
-    agenda: [
-      '<strong>Day 1: Drawing Template & Custom Attributes</strong><ul><li>Customizing drawing title blocks and revision templates</li><li>Customizing drawing material report templates</li><li>Integrating title blocks and material reports into drawing layouts</li><li>Creating and customizing report templates</li><li>Defining and creating custom user defined attributes (UDA)</li></ul>',
-      '<strong>Day 2: Parametric Custom Components</strong><ul><li>Creating custom parts</li><li>Developing custom details</li><li>Creation of custom connections with predefined rules</li><li>Modifying the dialog boxes of custom components</li><li>Configuring auto connection rules</li></ul>',
-      '<strong>Day 3: Tekla-E3D & S3D Integration</strong><ul><li>Install the required extensions to enable interoperability between Tekla Structures and E3D/PDMS/S3D</li><li>Export data from E3D/PDMS</li><li>Optimize import process</li><li>Map profiles and materials</li><li>Assign UDAs to new Tekla parts to customize the integration</li><li>Import and export to S3D</li></ul>'
-    ],
-    assessment: {
-      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
-      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
-      bullets:[
-        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+    title: {
+      en: 'Tekla Structures — Steel Advanced, Offshore Training',
+      id: 'Tekla Structures — Pelatihan Lanjutan (Advanced) Baja Lepas Pantai (Offshore)'
+    },
+    skillLevel: { en: 'Advanced', id: 'Tingkat Lanjut' },
+    prerequisite: { 
+      en: '<ul><li>Fundamental skills in Tekla Structures</li></ul>', 
+      id: '<ul><li>Keterampilan dasar dalam Tekla Structures</li></ul>' 
+    },
+    duration: { en: '3 Days', id: '3 Hari' },
+    method: { en: 'Online or Classroom', id: 'Online (via Zoom) atau Tatap Muka' },
+    lede: {
+      en: 'This instructor-led training course is open to Tekla Structures users based in Malaysia and Singapore. Conducted in English, this 3-day Tekla Structures Offshore Advanced training is designed for experienced users who want to customize and optimize their Tekla Structures environment for maximum efficiency and productivity in offshore steel projects.<br><br>Learners will apply their skills in complex project settings, focusing on advanced modeling, detailing, and integration workflows relevant to offshore structures.',
+      id: 'Pelatihan berinstruktur ini terbuka untuk pengguna Tekla Structures di Indonesia. Dibawakan dalam Bahasa Indonesia, pelatihan Lanjutan Tekla Structures Offshore selama 3 hari ini dirancang bagi pengguna berpengalaman yang ingin menyesuaikan dan mengoptimalkan lingkungan Tekla Structures mereka demi efisiensi dan produktivitas maksimal dalam proyek baja lepas pantai.<br><br>Peserta akan menerapkan keterampilan mereka dalam pengaturan proyek kompleks, berfokus pada pemodelan tingkat lanjut, pendetailan, dan alur kerja integrasi yang relevan dengan struktur lepas pantai.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        'Customizing drawing templates and reports for company standards',
+        'Developing parametric custom components for complex offshore structures',
+        'Configuring model templates and managing company-specific settings',
+        'Tekla–E3D & S3D integration workflows'
+      ],
+      id: [
+        'Mengkustomisasi templat gambar dan laporan sesuai standar perusahaan',
+        'Mengembangkan komponen kustom parametrik untuk struktur lepas pantai yang kompleks',
+        'Mengatur templat model dan mengelola konfigurasi standar perusahaan',
+        'Alur kerja integrasi Tekla–E3D & S3D'
       ]
+    },
+    outcomes: {
+      en: [
+        'Customize drawing and reporting tools for project-specific requirements',
+        'Build parametric components to automate repetitive modeling tasks',
+        'Configure and standardize project environments using model templates',
+        'Integrate Tekla Structures with E3D and S3D for efficient offshore workflows'
+      ],
+      id: [
+        'Mengkustomisasi alat pembuat gambar (drawing tools) dan laporan sesuai kebutuhan proyek',
+        'Membangun komponen parametrik untuk mengotomatisasi tugas pemodelan berulang',
+        'Pengaturan dan standarisasi proyek menggunakan templat model',
+        'Mengintegrasikan Tekla Structures dengan E3D dan S3D untuk alur kerja offshore yang efisien'
+      ]
+    },
+    agenda: {
+      en: [
+        '<strong>Day 1: Drawing Template & Custom Attributes</strong><ul><li>Customizing drawing title blocks and revision templates</li><li>Customizing drawing material report templates</li><li>Integrating title blocks and material reports into drawing layouts</li><li>Creating and customizing report templates</li><li>Defining and creating custom user defined attributes (UDA)</li></ul>',
+        '<strong>Day 2: Parametric Custom Components</strong><ul><li>Creating custom parts</li><li>Developing custom details</li><li>Creation of custom connections with predefined rules</li><li>Modifying the dialog boxes of custom components</li><li>Configuring auto connection rules</li></ul>',
+        '<strong>Day 3: Tekla-E3D & S3D Integration</strong><ul><li>Install the required extensions to enable interoperability between Tekla Structures and E3D/PDMS/S3D</li><li>Export data from E3D/PDMS</li><li>Optimize import process</li><li>Map profiles and materials</li><li>Assign UDAs to new Tekla parts to customize the integration</li><li>Import and export to S3D</li></ul>'
+      ],
+      id: [
+        '<strong>Hari 1: Templat Gambar & Atribut Kustom</strong><ul><li>Mengkustomisasi kop gambar (title block) dan templat revisi</li><li>Mengkustomisasi templat laporan material gambar</li><li>Mengkombinasikan kop gambar dan laporan material ke dalam tata letak gambar</li><li>Membuat dan mengkustomisasi templat laporan</li><li>Mendefinisikan dan membuat atribut kustom pengguna (UDA)</li></ul>',
+        '<strong>Hari 2: Komponen Kustom Parametrik</strong><ul><li>Membuat elemen kustom (custom parts)</li><li>Mengembangkan detail kustom</li><li>Membuat sambungan kustom dengan aturan terdefinisi</li><li>Memodifikasi dialog box komponen kustom</li><li>Mengonfigurasi aturan sambungan otomatis</li></ul>',
+        '<strong>Hari 3: Integrasi Tekla-E3D & S3D</strong><ul><li>Menginstal plug-in yang diperlukan untuk mengaktifkan interoperabilitas antara Tekla Structures dan E3D/PDMS/S3D</li><li>Mengekspor data dari E3D/PDMS</li><li>Mengoptimalkan proses impor</li><li>Memetakan profil dan material</li><li>Menerapkan UDA pada elemen Tekla baru untuk penyesuaian integrasi</li><li>Melakukan impor dan ekspor ke S3D</li></ul>'
+      ]
+    },
+    assessment: {
+      en: {
+        intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+        detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+        bullets:[
+          'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structures Professional Certification examination.'
+        ]
+      },
+      id: {
+        intro:'Sertifikasi Profesional Tekla menawarkan ujian berbasis kinerja di mana peserta akan diuji sebagian besar pada keterampilan praktis dengan perangkat lunak Tekla.',
+        detail:'Melalui sistem ini, peserta dapat diukur secara akurat berdasarkan keterampilan aplikasi daripada pengetahuan teoritis.',
+        bullets:[
+          'Setelah menyelesaikan kursus ini, setiap peserta berhak mengikuti satu kali ujian Sertifikasi Profesional Tekla Structures secara gratis.'
+        ]
+      }
     }
   },
   { 
     id:'ts-bridge-creator', 
     category:'tekla-structures', 
     placeholder:true,
-    title:'Tekla Structures — Fundamental Bridge Creator Training', 
     eyebrow:'Tekla Structures',
-    skillLevel:'Fundamental', 
-    duration:'TBD', 
-    method:'TBD' 
+    title: {
+      en: 'Tekla Structures — Fundamental Bridge Creator Training',
+      id: 'Tekla Structures — Pelatihan Dasar Bridge Creator'
+    },
+    skillLevel: { en: 'Fundamental', id: 'Tingkat Dasar' },
+    duration: { en: 'TBD', id: 'Akan Ditentukan' },
+    method: { en: 'TBD', id: 'Akan Ditentukan' }
   },
   {
     id:'ts-custom-training',
     category:'tekla-structures',
-    title:'Tekla Structures — Custom Training',
     eyebrow:'Tekla Structures',
-    skillLevel:'Customized',
-    duration:'Variation / TBD',
-    method:'Online (via Zoom) or Classroom',
-    lede:'This instructor-led training course is open to Tekla Structures users based in Malaysia and Singapore. Conducted in English, this Tekla Structures Custom Training course is designed for professionals and organizations seeking a customized learning experience with Tekla Structures. The course content is tailored to match your specific workflows, project requirements, and skill levels, ensuring relevant, practical knowledge that can be applied immediately.',
-    contactNote:'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
-    topics:[
-      '<strong style="color:var(--blue);">Depending on your needs, the training may include (but is not limited to the topics below):</strong>',
-      'Introduction to Tekla Structures – Overview of software capabilities and benefits.',
-      'Model Creation and Modification – Creating, editing, and managing model objects according to project standards.',
-      'Reinforcement, Connections, and Detailing – Applying reinforcement, components, and custom details.',
-      'Drawing Production – Generating accurate fabrication, erection, and general arrangement drawings.',
-      'Reporting and Data Management – Producing reports and organizing project information.'
-    ],
-    outcomes:[
-      'Apply Tekla Structures workflows relevant to their project requirements.',
-      'Efficiently create, modify, and manage model objects and assemblies.',
-      'Produce accurate drawings and reports from the 3D model.',
-      'Improve productivity by following recommended best practices.'
-    ]
+    title: {
+      en: 'Tekla Structures — Custom Training',
+      id: 'Tekla Structures — Pelatihan Khusus (Custom Training)'
+    },
+    skillLevel: { en: 'Customized', id: 'Kustomisasi' },
+    duration: { en: 'Variation / TBD', id: 'Bervariasi / Akan Ditentukan' },
+    method: { en: 'Online or Classroom', id: 'Online (via Zoom) atau Tatap Muka' },
+    lede: {
+      en: 'This instructor-led training course is open to Tekla Structures users based in Malaysia and Singapore. Conducted in English, this Tekla Structures Custom Training course is designed for professionals and organizations seeking a customized learning experience with Tekla Structures. The course content is tailored to match your specific workflows, project requirements, and skill levels, ensuring relevant, practical knowledge that can be applied immediately.',
+      id: 'Pelatihan berinstruktur ini terbuka untuk pengguna Tekla Structures di Indonesia. Dibawakan dalam Bahasa Indonesia, Pelatihan Kustom Tekla Structures ini dirancang bagi para profesional dan organisasi yang membutuhkan pengalaman belajar terintegrasi yang disesuaikan. Konten kursus dirancang khusus agar sesuai dengan alur kerja, persyaratan proyek, dan tingkat keterampilan Anda, memastikan pengetahuan praktis yang relevan dan dapat segera diterapkan.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        '<strong style="color:var(--blue);">Depending on your needs, the training may include (but is not limited to the topics below):</strong>',
+        'Introduction to Tekla Structures – Overview of software capabilities and benefits.',
+        'Model Creation and Modification – Creating, editing, and managing model objects according to project standards.',
+        'Reinforcement, Connections, and Detailing – Applying reinforcement, components, and custom details.',
+        'Drawing Production – Generating accurate fabrication, erection, and general arrangement drawings.',
+        'Reporting and Data Management – Producing reports and organizing project information.'
+      ],
+      id: [
+        '<strong style="color:var(--blue);">Tergantung kebutuhan Anda, pelatihan dapat mencakup (namun tidak terbatas pada topik di bawah ini):</strong>',
+        'Pengenalan Tekla Structures – Gambaran umum kemampuan dan manfaat perangkat lunak.',
+        'Pembuatan dan Modifikasi Model – Membuat, mengedit, dan mengelola objek model sesuai standar proyek.',
+        'Penulangan, Sambungan, dan Pendetailan – Menerapkan tulangan, komponen, dan detail kustom.',
+        'Produksi Gambar Kerja – Menghasilkan gambar fabrikasi, ereksi, dan gambar denah umum yang akurat.',
+        'Pelaporan dan Manajemen Data – Menghasilkan laporan dan mengorganisasi informasi proyek.'
+      ]
+    },
+    outcomes: {
+      en: [
+        'Apply Tekla Structures workflows relevant to their project requirements.',
+        'Efficiently create, modify, and manage model objects and assemblies.',
+        'Produce accurate drawings and reports from the 3D model.',
+        'Improve productivity by following recommended best practices.'
+      ],
+      id: [
+        'Menerapkan alur kerja Tekla Structures yang relevan dengan kebutuhan proyek Anda.',
+        'Membuat, memodifikasi, dan mengelola objek model serta rakitan secara efisien.',
+        'Menghasilkan gambar dan laporan yang akurat dari model 3D.',
+        'Meningkatkan produktivitas dengan mengikuti praktik terbaik yang direkomendasikan.'
+      ]
+    }
   },
 
   /* ---- Tekla Structural Designer ---- */
   { 
     id:'tsd-fundamental', 
     category:'tekla-structural-designer',
-    title:'Tekla Structural Designer — Fundamental Training', 
     eyebrow:'Tekla Structural Designer',
-    skillLevel:'Basic', 
-    prerequisite:'<ul><li>Knowledge of engineering</li></ul>',
-    duration:'4 half-days (online) or 2 full days (classroom)', 
-    method:'Online (via Zoom) or Classroom',
-    lede: 'This instructor-led training course is offered exclusively to Tekla Structural Designer users in Singapore and Malaysia. Conducted in English, the Tekla Structural Designer Fundamental Training course runs for 2 full days (classroom) or 4 half-days (online) and references Eurocode standards (EN).<br><br>Designed for engineers who are new to Tekla Structural Designer, this course teaches the fundamentals of the software, covering modeling, analysis, and design, as well as producing engineering drawings and reports for a complete project.',
-    contactNote: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
-    topics: [
-      'Introduction to Tekla Structural Designer – Overview of the software and its benefits',
-      'Physical Modeling – Creating and modifying building models with precision',
-      'Gravity and Lateral Design – Applying loads and understanding design behavior',
-      'Steel and Concrete Design – Performing code-compliant structural design',
-      'Engineering Drawings – Producing accurate drawings for project documentation',
-      'Reporting – Generating design and analysis reports efficiently',
-      'Tips and Shortcuts – Practical techniques used by experienced Tekla users'
-    ],
-    outcomes: [
-      'Model steel and concrete structures effectively in Tekla Structural Designer',
-      'Apply gravity and lateral load designs with confidence',
-      'Produce engineering drawings and reports for project documentation',
-      'Utilize software shortcuts and techniques to improve workflow efficiency',
-      'Apply fundamental Tekla Structural Designer skills to real-world projects'
-    ],
-    agenda: [
-      '<strong>Introduction & UI</strong><ul><li>Graphical User Interface & Screen Layout</li><li>Autosave & Backups</li><li>Quick Access Toolbar & The Ribbon</li><li>Project Workspace & Properties Window</li><li>Selection Techniques, Move & Rotate</li></ul>',
-      '<strong>Project Settings & Modeling</strong><ul><li>Settings Sets, Design Codes & Section Defaults</li><li>Establish Levels & Gridlines</li><li>Modeling Concrete Members & Floors</li><li>Modeling Concrete Meshed Shear Walls</li><li>Modeling Steel Members, Trusses, Braces & Roof</li><li>Modeling Foundations, Piles & Mats</li></ul>',
-      '<strong>Loading & Analysis</strong><ul><li>Load cases and combinations</li><li>Application of panel, member and structure loads</li><li>Wind loading</li><li>Sway & Drift Checks, Modification Factors</li><li>Analysis Types & Solver Models</li></ul>',
-      '<strong>Design & Reporting</strong><ul><li>Loading Summaries & Analysis Results</li><li>Design Concrete/Steel/All</li><li>Foundation Design</li><li>Member Report & Model Report</li><li>Detailing Drawings, Schedules, & General Arrangements</li></ul>'
-    ],
-    assessment: {
-      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
-      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
-      bullets:[
-        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structural Designer Professional Certification examination.'
+    title: {
+      en: 'Tekla Structural Designer — Fundamental Training',
+      id: 'Tekla Structural Designer — Pelatihan Dasar'
+    },
+    skillLevel: { en: 'Basic', id: 'Tingkat Dasar' },
+    prerequisite: { 
+      en: '<ul><li>Knowledge of engineering</li></ul>', 
+      id: '<ul><li>Pengetahuan teknik sipil/struktur</li></ul>' 
+    },
+    duration: { en: '4 half-days (online) or 2 full days (classroom)', id: '4 setengah hari (online) atau 2 hari penuh (kelas)' },
+    method: { en: 'Online or Classroom', id: 'Online (via Zoom) atau Tatap Muka' },
+    lede: {
+      en: 'This instructor-led training course is offered exclusively to Tekla Structural Designer users in Singapore and Malaysia. Conducted in English, the Tekla Structural Designer Fundamental Training course runs for 2 full days (classroom) or 4 half-days (online) and references Eurocode standards (EN).<br><br>Designed for engineers who are new to Tekla Structural Designer, this course teaches the fundamentals of the software, covering modeling, analysis, and design, as well as producing engineering drawings and reports for a complete project.',
+      id: 'Pelatihan berinstruktur ini ditawarkan secara eksklusif kepada pengguna Tekla Structural Designer di Indonesia. Dibawakan dalam Bahasa Indonesia, kursus Pelatihan Dasar Tekla Structural Designer berlangsung selama 2 hari penuh (kelas) atau 4 setengah hari (online) dan mengacu pada standar USCode (US).<br><br>Dirancang untuk insinyur yang baru mengenal Tekla Structural Designer, kursus ini mengajarkan dasar-dasar perangkat lunak, mencakup pemodelan, analisis, dan desain, serta pembuatan gambar teknik dan laporan proyek secara menyeluruh.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        'Introduction to Tekla Structural Designer – Overview of the software and its benefits',
+        'Physical Modeling – Creating and modifying building models with precision',
+        'Gravity and Lateral Design – Applying loads and understanding design behavior',
+        'Steel and Concrete Design – Performing code-compliant structural design',
+        'Engineering Drawings – Producing accurate drawings for project documentation',
+        'Reporting – Generating design and analysis reports efficiently',
+        'Tips and Shortcuts – Practical techniques used by experienced Tekla users'
+      ],
+      id: [
+        'Pengenalan Tekla Structural Designer – Gambaran umum dan manfaat perangkat lunak',
+        'Pemodelan Fisik – Membuat dan memodifikasi model bangunan dengan presisi',
+        'Desain Beban Gravitasi dan Lateral – Menerapkan beban dan memahami perilaku struktur',
+        'Desain Struktur Baja dan Beton – Melakukan desain struktur yang patuh pada standar/kode',
+        'Gambar Teknik – Menghasilkan gambar akurat untuk dokumentasi proyek',
+        'Pelaporan – Menghasilkan laporan analisis dan desain secara efisien',
+        'Tips dan Pintasan (Shortcuts) – Teknik praktis yang digunakan oleh pengguna Tekla berpengalaman'
       ]
+    },
+    outcomes: {
+      en: [
+        'Model steel and concrete structures effectively in Tekla Structural Designer',
+        'Apply gravity and lateral load designs with confidence',
+        'Produce engineering drawings and reports for project documentation',
+        'Utilize software shortcuts and techniques to improve workflow efficiency',
+        'Apply fundamental Tekla Structural Designer skills to real-world projects'
+      ],
+      id: [
+        'Memodelkan struktur baja dan beton secara efektif di Tekla Structural Designer',
+        'Menerapkan desain beban gravitasi dan beban lateral dengan percaya diri',
+        'Menghasilkan gambar teknik dan laporan untuk dokumentasi proyek',
+        'Memanfaatkan pintasan (shortcuts) dan teknik perangkat lunak untuk meningkatkan efisiensi kerja',
+        'Menerapkan keterampilan dasar Tekla Structural Designer pada proyek nyata'
+      ]
+    },
+    agenda: {
+      en: [
+        '<strong>Introduction & UI</strong><ul><li>Graphical User Interface & Screen Layout</li><li>Autosave & Backups</li><li>Quick Access Toolbar & The Ribbon</li><li>Project Workspace & Properties Window</li><li>Selection Techniques, Move & Rotate</li></ul>',
+        '<strong>Project Settings & Modeling</strong><ul><li>Settings Sets, Design Codes & Section Defaults</li><li>Establish Levels & Gridlines</li><li>Modeling Concrete Members & Floors</li><li>Modeling Concrete Meshed Shear Walls</li><li>Modeling Steel Members, Trusses, Braces & Roof</li><li>Modeling Foundations, Piles & Mats</li></ul>',
+        '<strong>Loading & Analysis</strong><ul><li>Load cases and combinations</li><li>Application of panel, member and structure loads</li><li>Wind loading</li><li>Sway & Drift Checks, Modification Factors</li><li>Analysis Types & Solver Models</li></ul>',
+        '<strong>Design & Reporting</strong><ul><li>Loading Summaries & Analysis Results</li><li>Design Concrete/Steel/All</li><li>Foundation Design</li><li>Member Report & Model Report</li><li>Detailing Drawings, Schedules, & General Arrangements</li></ul>'
+      ],
+      id: [
+        '<strong>Pengenalan & Antarmuka Pengguna</strong><ul><li>Antarmuka Grafis Pengguna & Tata Letak Layar</li><li>Penyimpanan Otomatis (Autosave) & Cadangan (Backups)</li><li>Quick Access Toolbar & Ribbon</li><li>Ruang Kerja Proyek & Jendela Properti</li><li>Teknik Seleksi, Geser & Putar (Rotate)</li></ul>',
+        '<strong>Pengaturan Proyek & Pemodelan</strong><ul><li>Pengaturan Set, Kode Desain & pengaturan standar Profil</li><li>Menentukan Elevasi/Lantai & Garis Kisi (Grids)</li><li>Pemodelan Elemen Beton & Pelat Lantai</li><li>Pemodelan Dinding Geser Beton (Meshed Shear Walls)</li><li>Pemodelan Elemen Baja, Rangka Batang (Truss), Pengaku (Brace) & Atap</li><li>Pemodelan Pondasi, Tiang Pancang & Pondasi Pelat (Mat/Raft)</li></ul>',
+        '<strong>Pembebanan & Analisis</strong><ul><li>Kombinasi dan kasus pembebanan</li><li>Penerapan beban panel, elemen, dan struktur</li><li>Beban angin</li><li>Pemeriksaan Sway & Drift, Faktor Modifikasi</li><li>Tipe Analisis & Model Solver</li></ul>',
+        '<strong>Desain & Pelaporan</strong><ul><li>Ringkasan Pembebanan & Hasil Analisis</li><li>Desain Beton/Baja/Semua</li><li>Desain Pondasi</li><li>Laporan Elemen & Laporan Model</li><li>Gambar Detail, Jadwal Penulangan, & Denah Umum</li></ul>'
+      ]
+    },
+    assessment: {
+      en: {
+        intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+        detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+        bullets:[
+          'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structural Designer Professional Certification examination.'
+        ]
+      },
+      id: {
+        intro:'Sertifikasi Profesional Tekla menawarkan ujian berbasis kinerja di mana peserta akan diuji sebagian besar pada keterampilan praktis dengan perangkat lunak Tekla.',
+        detail:'Melalui sistem ini, peserta dapat diukur secara akurat berdasarkan keterampilan aplikasi daripada pengetahuan teoritis.',
+        bullets:[
+          'Setelah menyelesaikan kursus ini, setiap peserta berhak mengikuti satu kali ujian Sertifikasi Profesional Tekla Structural Designer secara gratis.'
+        ]
+      }
     }
   },
   { 
     id:'tsd-intermediate', 
+    availableIn: ['en'],
     category:'tekla-structural-designer',
-    title:'Tekla Structural Designer — Intermediate Training', 
     eyebrow:'Tekla Structural Designer',
-    skillLevel:'Intermediate', 
-    prerequisite:'<ul><li>Completion of Fundamental Training</li><li>Basic proficiency with Tekla Structural Designer</li></ul>',
-    duration:'2 half-days (online) or 1 full day (classroom)', 
-    method:'Online (via Zoom) or Classroom',
-    lede: 'This instructor-led training course is offered exclusively to Tekla Structural Designer users in Singapore and Malaysia. Conducted in English, the Tekla Structural Designer Intermediate Training course runs for 1 full day (classroom) or 2 half-days (online) and references Eurocode standards (EN).<br><br>Designed for structural engineers and professionals who have completed the Fundamental Training, this course expands knowledge and skills by introducing intermediate-to-advanced analysis techniques, design methodologies, and workflow optimizations to improve accuracy and efficiency in real-world projects.',
-    contactNote: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
-    topics: [
-      'Wind Tunnel Analysis – Understanding wind behaviour and its effects on structures.',
-      'Simple Wind Analysis – Performing wind load calculations for various building types.',
-      'Pattern Loading – Applying advanced load distribution techniques for diverse scenarios.',
-      'Equipment Loading Considerations – Incorporating machinery and dynamic loads into structural models.',
-      'Slab Design Using the Strip Method – Enhancing slab analysis and optimisation.',
-      'Transfer Structure Design & Analysis – Handling complex load transfers in multi-story buildings.',
-      'Wind Load Analysis for Open Structures – Addressing unique challenges in open-frame designs.'
-    ],
-    outcomes: [
-      'Apply intermediate-level structural analysis techniques in Tekla Structural Designer',
-      'Perform wind, pattern, and equipment load analyses for a variety of structures',
-      'Design slabs using the Strip Method and optimize slab performance',
-      'Manage transfer structures and open-frame wind load scenarios with confidence',
-      'Improve accuracy and efficiency in real-world structural projects',
-      'Prepare for progression to Tekla Structural Designer Advanced Training'
-    ],
-    agenda: [
-      '<strong>Wind Tunnel & Simple Wind Analysis</strong><ul><li>Generate Wind Tunnel Tabulated data and Modal Mass combinations</li><li>Modal Analysis, Review Mode Shapes, Generate Result Tables and Reports</li><li>Applying Sample Wind loads at Floor Diaphragms</li><li>Generate Wind load cases & combinations, Analysis, Design & Review Results</li><li>Simple wind overview and comparison with the Wind Wizard approach</li><li>Application of simple wind loads and Reviewing the results</li><li>Simplified Method for Wind Loading requirements and working with Wind Wizard</li></ul>',
-      '<strong>Pattern Loading & Slab Design</strong><ul><li>What is pattern loading?</li><li>Setting up pattern load cases and combinations</li><li>Reviewing automatically created patterns for beam and slab structures</li><li>Defining patterns for flat slab structures and reviewing results</li><li>Overview of slab design process with Strip Method</li><li>Use of Patch Panel to design flat slabs based on column strip method</li><li>Review slab reinforcement, analysis results, design calculations, and reports</li></ul>',
-      '<strong>Transfer Structures & Equipment Loading</strong><ul><li>Meshing Properties, Impacts of mesh size, and What are sub models?</li><li>Shear wall model types and Overview of combined analysis</li><li>Why chase-down analyses? and Member design</li><li>Equipment Loading Introduction and Overview</li><li>Equipment Modeling, Loadcases, and Applying Equipment Loads</li></ul>',
-      '<strong>Open Structure Wind Load & Additional Topics</strong><ul><li>Open Structure Wind Load Introduction</li><li>Wind Load Calculation for Members, Ancillaries, and Equipment</li><li>Shape Factors & Effective Area Factors</li><li>Apply Open Structure Wind Load and generate Reports</li><li>Getting Help with using TSD and Frequently Asked Questions</li></ul>'
-    ],
-    assessment: {
-      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
-      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
-      bullets:[
-        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structural Designer Professional Certification examination.'
+    title: {
+      en: 'Tekla Structural Designer — Intermediate Training',
+      id: 'Tekla Structural Designer — Pelatihan Menengah (Intermediate)'
+    },
+    skillLevel: { en: 'Intermediate', id: 'Tingkat Menengah' },
+    prerequisite: { 
+      en: '<ul><li>Completion of Fundamental Training</li><li>Basic proficiency with Tekla Structural Designer</li></ul>', 
+      id: '<ul><li>Telah menyelesaikan Pelatihan Dasar</li><li>Kemahiran dasar dalam menggunakan Tekla Structural Designer</li></ul>' 
+    },
+    duration: { en: '2 half-days (online) or 1 full day (classroom)', id: '2 setengah hari (online) atau 1 hari penuh (kelas)' },
+    method: { en: 'Online (via Zoom) or Classroom', id: 'Online (via Zoom)' },
+    lede: {
+      en: 'This instructor-led training course is offered exclusively to Tekla Structural Designer users in Singapore and Malaysia. Conducted in English, the Tekla Structural Designer Intermediate Training course runs for 1 full day (classroom) or 2 half-days (online) and references Eurocode standards (EN).<br><br>Designed for structural engineers and professionals who have completed the Fundamental Training, this course expands knowledge and skills by introducing intermediate-to-advanced analysis techniques, design methodologies, and workflow optimizations to improve accuracy and efficiency in real-world projects.',
+      id: 'Kursus pelatihan berinstruktur ini ditawarkan secara eksklusif kepada pengguna Tekla Structural Designer di Indonesia. Dibawakan dalam Bahasa Inggris, Pelatihan Menengah Tekla Structural Designer berlangsung selama 2 setengah hari (online) dan mengacu pada standar USCode (US).<br><br>Dirancang untuk insinyur struktur dan profesional yang telah menyelesaikan Pelatihan Dasar, kursus ini memperluas pengetahuan dan keterampilan dengan memperkenalkan teknik analisis tingkat menengah hingga lanjut, metodologi desain, dan optimasi alur kerja untuk meningkatkan akurasi dan efisiensi dalam proyek nyata.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        'Wind Tunnel Analysis – Understanding wind behaviour and its effects on structures.',
+        'Simple Wind Analysis – Performing wind load calculations for various building types.',
+        'Pattern Loading – Applying advanced load distribution techniques for diverse scenarios.',
+        'Equipment Loading Considerations – Incorporating machinery and dynamic loads into structural models.',
+        'Slab Design Using the Strip Method – Enhancing slab analysis and optimisation.',
+        'Transfer Structure Design & Analysis – Handling complex load transfers in multi-story buildings.',
+        'Wind Load Analysis for Open Structures – Addressing unique challenges in open-frame designs.'
+      ],
+      id: [
+        'Analisis Terowongan Angin (Wind Tunnel) – Memahami perilaku angin dan dampaknya pada struktur.',
+        'Analisis Angin Sederhana – Melakukan perhitungan beban angin untuk berbagai tipe bangunan.',
+        'Pembebanan Pola (Pattern Loading) – Menerapkan teknik distribusi beban lanjutan.',
+        'Pertimbangan Beban Peralatan/Mesin – Memasukkan mesin dan beban dinamis ke dalam model struktur.',
+        'Desain Pelat Menggunakan Strip Method – Meningkatkan analisis dan optimasi pelat.',
+        'Desain & Analisis Struktur Transfer – Menangani transfer beban kompleks pada bangunan bertingkat.',
+        'Analisis Beban Angin untuk Struktur Terbuka – Menjawab tantangan khusus pada desain rangka terbuka.'
       ]
+    },
+    outcomes: {
+      en: [
+        'Apply intermediate-level structural analysis techniques in Tekla Structural Designer',
+        'Perform wind, pattern, and equipment load analyses for a variety of structures',
+        'Design slabs using the Strip Method and optimize slab performance',
+        'Manage transfer structures and open-frame wind load scenarios with confidence',
+        'Improve accuracy and efficiency in real-world structural projects',
+        'Prepare for progression to Tekla Structural Designer Advanced Training'
+      ],
+      id: [
+        'Menerapkan teknik analisis struktur tingkat menengah di Tekla Structural Designer',
+        'Melakukan analisis beban angin, pola, dan peralatan untuk berbagai jenis struktur',
+        'Mendesain pelat lantai menggunakan Metode Strip dan mengoptimalkan kinerja pelat',
+        'Mengelola struktur transfer dan skenario beban angin rangka terbuka dengan percaya diri',
+        'Meningkatkan akurasi dan efisiensi pada proyek struktur dunia nyata',
+        'Mempersiapkan diri untuk melanjutkan ke Pelatihan Lanjutan Tekla Structural Designer'
+      ]
+    },
+    agenda: {
+      en: [
+        '<strong>Wind Tunnel & Simple Wind Analysis</strong><ul><li>Generate Wind Tunnel Tabulated data and Modal Mass combinations</li><li>Modal Analysis, Review Mode Shapes, Generate Result Tables and Reports</li><li>Applying Sample Wind loads at Floor Diaphragms</li><li>Generate Wind load cases & combinations, Analysis, Design & Review Results</li><li>Simple wind overview and comparison with the Wind Wizard approach</li><li>Application of simple wind loads and Reviewing the results</li><li>Simplified Method for Wind Loading requirements and working with Wind Wizard</li></ul>',
+        '<strong>Pattern Loading & Slab Design</strong><ul><li>What is pattern loading?</li><li>Setting up pattern load cases and combinations</li><li>Reviewing automatically created patterns for beam and slab structures</li><li>Defining patterns for flat slab structures and reviewing results</li><li>Overview of slab design process with Strip Method</li><li>Use of Patch Panel to design flat slabs based on column strip method</li><li>Review slab reinforcement, analysis results, design calculations, and reports</li></ul>',
+        '<strong>Transfer Structures & Equipment Loading</strong><ul><li>Meshing Properties, Impacts of mesh size, and What are sub models?</li><li>Shear wall model types and Overview of combined analysis</li><li>Why chase-down analyses? and Member design</li><li>Equipment Loading Introduction and Overview</li><li>Equipment Modeling, Loadcases, and Applying Equipment Loads</li></ul>',
+        '<strong>Open Structure Wind Load & Additional Topics</strong><ul><li>Open Structure Wind Load Introduction</li><li>Wind Load Calculation for Members, Ancillaries, and Equipment</li><li>Shape Factors & Effective Area Factors</li><li>Apply Open Structure Wind Load and generate Reports</li><li>Getting Help with using TSD and Frequently Asked Questions</li></ul>'
+      ],
+      id: [
+        '<strong>Terowongan Angin & Analisis Angin Sederhana</strong><ul><li>Menghasilkan data tabel Wind Tunnel dan kombinasi Massa Modal</li><li>Analisis Modal, Peninjauan Bentuk Ragam (Mode Shapes), Tabel Hasil & Laporan</li><li>Penerapan beban angin contoh pada Diafragma Lantai</li><li>Menghasilkan kasus & kombinasi beban angin, Analisis, Desain & Peninjauan Hasil</li><li>Gambaran umum angin sederhana dan perbandingannya dengan Wind Wizard</li><li>Penerapan beban angin sederhana dan Peninjauan hasil</li><li>Metode yang disederhanakan untuk persyaratan Beban Angin dan bekerja dengan Wind Wizard</li></ul>',
+        '<strong>Pembebanan Pola & Desain Pelat</strong><ul><li>Apa itu pembebanan pola (pattern loading)?</li><li>Mengatur kasus beban pola dan kombinasinya</li><li>Meninjau pola terbuat otomatis untuk struktur balok dan pelat</li><li>Mendefinisikan pola untuk struktur flat slab dan meninjau hasilnya</li><li>Gambaran umum proses desain pelat dengan Strip Method</li><li>Penggunaan Patch Panel untuk mendesain flat slab berdasarkan metode column strip</li><li>Meninjau tulangan pelat, hasil analisis, perhitungan desain, dan laporan</li></ul>',
+        '<strong>Struktur Transfer & Beban Peralatan</strong><ul><li>Properti Meshing, Dampak ukuran mesh, dan Apa itu sub-model?</li><li>Tipe model dinding geser dan Gambaran umum analisis kombinasi</li><li>Mengapa perlu analisis chase-down? dan Desain elemen</li><li>Pengenalan dan Gambaran Umum Pembebanan Peralatan/Mesin</li><li>Pemodelan Peralatan, Kasus Beban, dan Menerapkan Beban Peralatan</li></ul>',
+        '<strong>Beban Angin Struktur Terbuka & Topik Tambahan</strong><ul><li>Pengenalan Beban Angin Struktur Terbuka</li><li>Perhitungan Beban Angin untuk Elemen, Struktur Tambahan, dan Peralatan</li><li>Faktor Shape & Faktor Area Efektif</li><li>Menerapkan Beban Angin Struktur Terbuka dan menghasilkan Laporan</li><li>Mendapatkan Bantuan penggunaan TSD dan Pertanyaan Sering Diajukan (FAQ)</li></ul>'
+      ]
+    },
+    assessment: {
+      en: {
+        intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+        detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+        bullets:[
+          'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structural Designer Professional Certification examination.'
+        ]
+      },
+      id: {
+        intro:'Sertifikasi Profesional Tekla menawarkan ujian berbasis kinerja di mana peserta akan diuji sebagian besar pada keterampilan praktis dengan perangkat lunak Tekla.',
+        detail:'Melalui sistem ini, peserta dapat diukur secara akurat berdasarkan keterampilan aplikasi daripada pengetahuan teoritis.',
+        bullets:[
+          'Setelah menyelesaikan kursus ini, setiap peserta berhak mengikuti satu kali ujian Sertifikasi Profesional Tekla Structural Designer secara gratis.'
+        ]
+      }
     }
   },
   { 
-    id:'tsd-advanced', 
+    id:'tsd-advanced',
+    availableIn: ['en'],
     category:'tekla-structural-designer',
-    title:'Tekla Structural Designer — Advanced Training', 
     eyebrow:'Tekla Structural Designer',
-    skillLevel:'Advanced', 
-    prerequisite:'<ul><li>Completion of Fundamental and Intermediate Training</li><li>Proficiency with Tekla Structural Designer</li></ul>',
-    duration:'2 half-days (online) or 1 full day (classroom)', 
-    method:'Online (via Zoom) or Classroom',
-    lede: 'This instructor-led training course is offered exclusively to Tekla Structural Designer users in Singapore and Malaysia. Conducted in English, the Tekla Structural Designer Advanced Training course runs for 1 full day (classroom) or 2 half-days (online) and references Eurocode standards (EN).<br><br>Designed for engineers who have completed the Fundamental and Intermediate Training, this course enhances expertise in advanced structural analysis, seismic design, vibration analysis, staged construction, and other specialized workflows to tackle complex projects with confidence and precision.',
-    contactNote: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
-    topics: [
-      'Footfall-Induced Vibration Analysis – Principles, affecting parameters, and SCI P354 model workflows',
-      'Seismic Module – Input parameters, RSA analysis and design, and mode shape review',
-      'Staged Construction Analysis – Procedures and applications for complex projects',
-      'Advanced Modeling Techniques – Orthotropic meshed walls, reference models, and planarize inclined planes'
-    ],
-    outcomes: [
-      'Conduct footfall-induced vibration analysis and modify SCI P354 models',
-      'Perform seismic analysis and design, including RSA and mode shape review',
-      'Execute staged construction analysis confidently',
-      'Apply advanced modeling tools to complex structural projects',
-      'Handle Eurocode-compliant advanced design workflows efficiently'
-    ],
-    agenda: [
-      '<strong>Footfall Analysis and Design</strong><ul><li>Introduction</li><li>Settings</li><li>Modeling</li><li>Analysis & Results</li><li>Report</li><li>Exercise</li><li>Conclusion</li></ul>',
-      '<strong>Seismic Module</strong><ul><li>Running Seismic Wizard and understanding input parameters (Ground Type, Importance class, Reference & Design Peak Ground Acceleration, Structural Ductility Class, Structural Plan & Elevation Regularity, ELF and RSA Methods, Fundamental Period & Structure Types, Behavior Factor q and Over-strength Factor, Seismic Inertia and load Combinations)</li><li>Review Response Spectrum Curve</li><li>RSA Analysis and Member Design</li><li>Review RSA Results & Mode Shapes</li><li>Generate Tabulated Results and Reports</li><li>Second order effect, Interstorey & Seismic Drift</li><li>Summary & Related TUA articles</li></ul>',
-      '<strong>Staged Construction</strong><ul><li>Staged Construction Analysis (SCA) & General Procedure</li><li>Create Model & Design Load Combinations, Load Combination Assignment</li><li>Define Construction Stages and Stage Duration</li><li>Reassign Members between Stages</li><li>Create Staged Construction Load Combination</li><li>Review Concrete Modification Factors for Stages</li><li>Activate Staged Construction Analysis and select other results sets</li><li>Run the Design, Review Results & Output Calculations</li><li>Design Comparison & Exercises</li></ul>',
-      '<strong>Advanced Modeling & Properties</strong><ul><li>Orthotropic Properties for Walls (New Orthotropic Meshed Walls, Exercise)</li><li>Reference Models (Exercise)</li><li>Planarize Inclined Plane (Exercise)</li></ul>'
-    ],
-    assessment: {
-      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
-      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
-      bullets:[
-        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structural Designer Professional Certification examination.'
+    title: {
+      en: 'Tekla Structural Designer — Advanced Training',
+      id: 'Tekla Structural Designer — Pelatihan Tingkat Lanjut (Advanced)'
+    },
+    skillLevel: { en: 'Advanced', id: 'Tingkat Lanjut' },
+    prerequisite: { 
+      en: '<ul><li>Completion of Fundamental and Intermediate Training</li><li>Proficiency with Tekla Structural Designer</li></ul>', 
+      id: '<ul><li>Telah menyelesaikan Pelatihan Dasar dan Menengah</li><li>Kemahiran dalam menggunakan Tekla Structural Designer</li></ul>' 
+    },
+    duration: { en: '2 half-days (online) or 1 full day (classroom)', id: '2 setengah hari (online) atau 1 hari penuh (kelas)' },
+    method: { en: 'Online (via Zoom) or Classroom', id: 'Online (via Zoom)' },
+    lede: {
+      en: 'This instructor-led training course is offered exclusively to Tekla Structural Designer users in Singapore and Malaysia. Conducted in English, the Tekla Structural Designer Advanced Training course runs for 1 full day (classroom) or 2 half-days (online) and references Eurocode standards (EN).<br><br>Designed for engineers who have completed the Fundamental and Intermediate Training, this course enhances expertise in advanced structural analysis, seismic design, vibration analysis, staged construction, and other specialized workflows to tackle complex projects with confidence and precision.',
+      id: 'Pelatihan berinstruktur ini ditawarkan secara eksklusif kepada pengguna Tekla Structural Designer di Indonesia. Dibawakan dalam Bahasa Inggris, Pelatihan Lanjutan Tekla Structural Designer berlangsung selama 2 setengah hari (online) dan mengacu pada standar USCode (US).<br><br>Dirancang untuk insinyur yang telah menyelesaikan Pelatihan Dasar dan Menengah, kursus ini meningkatkan keahlian dalam analisis struktur tingkat lanjut, desain gempa, analisis getaran, tahapan konstruksi (staged construction), dan alur kerja khusus lainnya.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        'Footfall-Induced Vibration Analysis – Principles, affecting parameters, and SCI P354 model workflows',
+        'Seismic Module – Input parameters, RSA analysis and design, and mode shape review',
+        'Staged Construction Analysis – Procedures and applications for complex projects',
+        'Advanced Modeling Techniques – Orthotropic meshed walls, reference models, and planarize inclined planes'
+      ],
+      id: [
+        'Analisis Getaran Akibat Langkah Kaki (Footfall) – Prinsip, parameter yang mempengaruhi, dan alur kerja model SCI P354',
+        'Modul Gempa (Seismic Module) – Parameter input, analisis RSA dan desain, serta peninjauan mode shape',
+        'Analisis Tahapan Konstruksi (Staged Construction) – Prosedur dan aplikasi untuk proyek kompleks',
+        'Teknik Pemodelan Lanjutan – Dinding meshed ortotropik, model referensi, dan meratakan bidang miring'
       ]
+    },
+    outcomes: {
+      en: [
+        'Conduct footfall-induced vibration analysis and modify SCI P354 models',
+        'Perform seismic analysis and design, including RSA and mode shape review',
+        'Execute staged construction analysis confidently',
+        'Apply advanced modeling tools to complex structural projects',
+        'Handle Eurocode-compliant advanced design workflows efficiently'
+      ],
+      id: [
+        'Melakukan analisis getaran akibat langkah kaki dan memodifikasi model SCI P354',
+        'Melakukan analisis dan desain gempa, termasuk RSA dan peninjauan bentukan ragam (mode shape)',
+        'Menjalankan analisis tahapan konstruksi dengan percaya diri',
+        'Menerapkan alat pemodelan tingkat lanjut pada proyek struktur yang kompleks',
+        'Menangani alur kerja desain tingkat lanjut yang patuh pada Eurocode secara efisien'
+      ]
+    },
+    agenda: {
+      en: [
+        '<strong>Footfall Analysis and Design</strong><ul><li>Introduction</li><li>Settings</li><li>Modeling</li><li>Analysis & Results</li><li>Report</li><li>Exercise</li><li>Conclusion</li></ul>',
+        '<strong>Seismic Module</strong><ul><li>Running Seismic Wizard and understanding input parameters (Ground Type, Importance class, Reference & Design Peak Ground Acceleration, Structural Ductility Class, Structural Plan & Elevation Regularity, ELF and RSA Methods, Fundamental Period & Structure Types, Behavior Factor q and Over-strength Factor, Seismic Inertia and load Combinations)</li><li>Review Response Spectrum Curve</li><li>RSA Analysis and Member Design</li><li>Review RSA Results & Mode Shapes</li><li>Generate Tabulated Results and Reports</li><li>Second order effect, Interstorey & Seismic Drift</li><li>Summary & Related TUA articles</li></ul>',
+        '<strong>Staged Construction</strong><ul><li>Staged Construction Analysis (SCA) & General Procedure</li><li>Create Model & Design Load Combinations, Load Combination Assignment</li><li>Define Construction Stages and Stage Duration</li><li>Reassign Members between Stages</li><li>Create Staged Construction Load Combination</li><li>Review Concrete Modification Factors for Stages</li><li>Activate Staged Construction Analysis and select other results sets</li><li>Run the Design, Review Results & Output Calculations</li><li>Design Comparison & Exercises</li></ul>',
+        '<strong>Advanced Modeling & Properties</strong><ul><li>Orthotropic Properties for Walls (New Orthotropic Meshed Walls, Exercise)</li><li>Reference Models (Exercise)</li><li>Planarize Inclined Plane (Exercise)</li></ul>'
+      ],
+      id: [
+        '<strong>Analisis dan Desain Getaran (Footfall)</strong><ul><li>Pengenalan</li><li>Pengaturan</li><li>Pemodelan</li><li>Analisis & Hasil</li><li>Laporan</li><li>Latihan Praktik</li><li>Kesimpulan</li></ul>',
+        '<strong>Modul Gempa (Seismic)</strong><ul><li>Menjalankan Seismic Wizard dan memahami parameter input (Ground Type, Importance class, Reference & Design Peak Ground Acceleration, Structural Ductility Class, Regularitas Denah & Elevasi, Metode ELF dan RSA, Periode Fundamental,Behavior Factor q, Kombinasi Pembebanan Gempa)</li><li>Meninjau Kurva Spektrum Respon</li><li>Analisis RSA dan Desain Elemen Struktur</li><li>Meninjau Hasil RSA & Mode Shapes</li><li>Menghasilkan Tabel Hasil dan Laporan</li><li>Efek orde kedua (P-Delta), Interstorey & Seismic Drift</li><li>Ringkasan & Artikel TUA Terkait</li></ul>',
+        '<strong>Tahapan Konstruksi (Staged Construction)</strong><ul><li>Analisis Tahapan Konstruksi (SCA) & Prosedur Umum</li><li>Membuat Model & Kombinasi Beban Desain</li><li>Menentukan Tahapan Konstruksi dan Durasi Tahap</li><li>Memindahkan Elemen antar Tahapan</li><li>Membuat Kombinasi Beban Tahapan Konstruksi</li><li>Meninjau Faktor Modifikasi Beton untuk Tahapan</li><li>Mengaktifkan Analisis Tahapan Konstruksi dan memilih hasil lainnya</li><li>Menjalankan Desain, Meninjau Hasil & Kalkulasi Output</li><li>Perbandingan Desain & Latihan Praktik</li></ul>',
+        '<strong>Pemodelan & Properti Lanjutan</strong><ul><li>Properti Ortotropik untuk Dinding (Dinding Meshed Ortotropik Baru, Latihan)</li><li>Model Referensi (Latihan)</li><li>Meratakan Bidang Miring (Planarize Inclined Plane) (Latihan)</li></ul>'
+      ]
+    },
+    assessment: {
+      en: {
+        intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+        detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+        bullets:[
+          'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structural Designer Professional Certification examination.'
+        ]
+      },
+      id: {
+        intro:'Sertifikasi Profesional Tekla menawarkan ujian berbasis kinerja di mana peserta akan diuji sebagian besar pada keterampilan praktis dengan perangkat lunak Tekla.',
+        detail:'Melalui sistem ini, peserta dapat diukur secara akurat berdasarkan keterampilan aplikasi daripada pengetahuan teoritis.',
+        bullets:[
+          'Setelah menyelesaikan kursus ini, setiap peserta berhak mengikuti satu kali ujian Sertifikasi Profesional Tekla Structural Designer secara gratis.'
+        ]
+      }
     }
   },
   { 
-    id:'tsd-precast', 
+    id:'tsd-precast',
+    availableIn: ['en'],
     category:'tekla-structural-designer',
-    title:'Tekla Structural Designer — Precast Structure Design Training', 
     eyebrow:'Tekla Structural Designer',
-    skillLevel:'Fundamental', 
-    prerequisite:'<ul><li>Basic engineering knowledge</li></ul>',
-    duration:'2 half-days (online) or 1 full day (classroom)', 
-    method:'Online (via Zoom) or Classroom',
-    lede: 'This instructor-led training is offered exclusively to Tekla customers in Singapore and Malaysia. Conducted in English, the Tekla Structural Designer Precast Structure Design course is delivered over 1 full day (classroom) or 2 half-days (online) and follows Eurocode standards (EN 1992-1-1).<br><br>Designed for engineers, the course provides step-by-step guidance on setting up models with precast elements and carrying out the complete design of precast concrete buildings in Tekla Structural Designer, ensuring accuracy, efficiency, and full Eurocode compliance.',
-    contactNote: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
-    topics: [
-      'Introduction to Tekla Structural Designer – Overview of features for precast design.',
-      'Model Setup – Creating models with precast elements.',
-      'Analysis and Design – Applying Eurocode-compliant design for precast concrete buildings.',
-      'Tekla Tedds Integration – Transferring analysis results for calculations.',
-      'Code Compliance – Meeting Eurocode (EN 1992-1-1) design requirements.',
-      'Reporting – Producing calculation reports for submission.'
-    ],
-    outcomes: [
-      'Set up and model precast elements in Tekla Structural Designer.',
-      'Perform Eurocode-compliant design for precast concrete structures.',
-      'Analyse and interpret design results effectively.',
-      'Integrate Tekla Structural Designer with Tekla Tedds for calculations.',
-      'Generate reports for authority submission.'
-    ],
-    agenda: [
-      '<strong>The Interface & Model Setup</strong><ul><li>Start a New Project</li><li>Setting Floor Levels and Grid Lines</li><li>Modeling Members at 1st Floor Level</li><li>Modeling Precast Members at 2nd, 3rd Floor Levels & Roof</li><li>Validate the Model</li><li>Applying Loads and Creating Load Combinations</li><li>Renumber Members</li></ul>',
-      '<strong>Analysis & Design (Static)</strong><ul><li>Loading Summaries & Display Graphical Results</li><li>Design All (Static)</li><li>Member Check/Design (Cast-in-place members) - Info Only</li><li>Report Configurations & Generating Reports</li><li>Getting Critical Design Forces for Additional Manual Checks</li><li>Enveloping Results for Precast and Cast-in-place Groups</li><li>Drawing Generation - Only for Cast-in-place Members</li></ul>',
-      '<strong>Tekla Tedds Integration & Construction Stages</strong><ul><li>Precast Beam and Column Design using Tedds</li><li>Precast Column/Beam Calculation Reports using Tedds</li><li>Adjust Precast Beam Section Sizes and Split Continuous Beams</li><li>Applying Construction Loads and Run the Analysis</li><li>Redesign Precast Members at Construction Stage using Tedds</li><li>Other Precast Element Design Calculation in Tekla Tedds</li><li>Wind Wizard and Foundation Modeling/Design</li></ul>'
-    ],
-    assessment: {
-      intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
-      detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
-      bullets:[
-        'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structural Designer Professional Certification examination.'
+    title: {
+      en: 'Tekla Structural Designer — Precast Structure Design Training',
+      id: 'Tekla Structural Designer — Pelatihan Desain Struktur Pracetak'
+    },
+    skillLevel: { en: 'Fundamental', id: 'Tingkat Dasar' },
+    prerequisite: { 
+      en: '<ul><li>Basic engineering knowledge</li></ul>', 
+      id: '<ul><li>Pengetahuan dasar teknik struktur</li></ul>' 
+    },
+    duration: { en: '2 half-days (online) or 1 full day (classroom)', id: '2 setengah hari (online) atau 1 hari penuh (kelas)' },
+    method: { en: 'Online (via Zoom) or Classroom', id: 'Online (via Zoom)' },
+    lede: {
+      en: 'This instructor-led training is offered exclusively to Tekla customers in Singapore and Malaysia. Conducted in English, the Tekla Structural Designer Precast Structure Design course is delivered over 1 full day (classroom) or 2 half-days (online) and follows Eurocode standards (EN 1992-1-1).<br><br>Designed for engineers, the course provides step-by-step guidance on setting up models with precast elements and carrying out the complete design of precast concrete buildings in Tekla Structural Designer, ensuring accuracy, efficiency, and full Eurocode compliance.',
+      id: 'Pelatihan berinstruktur ini ditawarkan secara eksklusif kepada pelanggan Tekla di Indonesia. Dibawakan dalam Bahasa Inggris, kursus Desain Struktur Pracetak Tekla Structural Designer ini disampaikan selama 2 setengah hari (online) dan mengikuti standar USCode (US)..<br><br>Dirancang untuk para insinyur, kursus ini memberikan panduan langkah demi langkah tentang cara membangun model dengan elemen pracetak dan melakukan desain lengkap bangunan beton pracetak di Tekla Structural Designer.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        'Introduction to Tekla Structural Designer – Overview of features for precast design.',
+        'Model Setup – Creating models with precast elements.',
+        'Analysis and Design – Applying Eurocode-compliant design for precast concrete buildings.',
+        'Tekla Tedds Integration – Transferring analysis results for calculations.',
+        'Code Compliance – Meeting Eurocode (EN 1992-1-1) design requirements.',
+        'Reporting – Producing calculation reports for submission.'
+      ],
+      id: [
+        'Pengenalan Tekla Structural Designer – Gambaran umum fitur untuk desain pracetak.',
+        'Pengaturan Model – Membuat model dengan elemen pracetak.',
+        'Analisis dan Desain – Menerapkan desain beton pracetak yang patuh standar Eurocode.',
+        'Integrasi Tekla Tedds – Memindahkan hasil analisis untuk perhitungan detail.',
+        'Kepatuhan Standar – Memenuhi persyaratan desain USode.',
+        'Pelaporan – Menghasilkan laporan perhitungan untuk pengajuan izin/otoritas.'
       ]
+    },
+    outcomes: {
+      en: [
+        'Set up and model precast elements in Tekla Structural Designer.',
+        'Perform Eurocode-compliant design for precast concrete structures.',
+        'Analyse and interpret design results effectively.',
+        'Integrate Tekla Structural Designer with Tekla Tedds for calculations.',
+        'Generate reports for authority submission.'
+      ],
+      id: [
+        'Mengatur dan memodelkan elemen pracetak di Tekla Structural Designer.',
+        'Melakukan desain struktur beton pracetak yang sesuai dengan Eurocode.',
+        'Menganalisis dan menginterpretasikan hasil desain secara efektif.',
+        'Mengintegrasikan Tekla Structural Designer dengan Tekla Tedds untuk perhitungan detail.',
+        'Menghasilkan laporan perhitungan untuk pengajuan ke pihak berwenang.'
+      ]
+    },
+    agenda: {
+      en: [
+        '<strong>The Interface & Model Setup</strong><ul><li>Start a New Project</li><li>Setting Floor Levels and Grid Lines</li><li>Modeling Members at 1st Floor Level</li><li>Modeling Precast Members at 2nd, 3rd Floor Levels & Roof</li><li>Validate the Model</li><li>Applying Loads and Creating Load Combinations</li><li>Renumber Members</li></ul>',
+        '<strong>Analysis & Design (Static)</strong><ul><li>Loading Summaries & Display Graphical Results</li><li>Design All (Static)</li><li>Member Check/Design (Cast-in-place members) - Info Only</li><li>Report Configurations & Generating Reports</li><li>Getting Critical Design Forces for Additional Manual Checks</li><li>Enveloping Results for Precast and Cast-in-place Groups</li><li>Drawing Generation - Only for Cast-in-place Members</li></ul>',
+        '<strong>Tekla Tedds Integration & Construction Stages</strong><ul><li>Precast Beam and Column Design using Tedds</li><li>Precast Column/Beam Calculation Reports using Tedds</li><li>Adjust Precast Beam Section Sizes and Split Continuous Beams</li><li>Applying Construction Loads and Run the Analysis</li><li>Redesign Precast Members at Construction Stage using Tedds</li><li>Other Precast Element Design Calculation in Tekla Tedds</li><li>Wind Wizard and Foundation Modeling/Design</li></ul>'
+      ],
+      id: [
+        '<strong>Antarmuka & Pengaturan Model</strong><ul><li>Memulai Proyek Baru</li><li>Menentukan Elevasi Lantai dan Garis Kisi</li><li>Memodelkan Elemen pada Lantai 1</li><li>Memodelkan Elemen Pracetak pada Lantai 2, 3 & Atap</li><li>Validasi Model</li><li>Menerapkan Beban dan Membuat Kombinasi Pembebanan</li><li>Penomoran Ulang Elemen</li></ul>',
+        '<strong>Analisis & Desain (Statis)</strong><ul><li>Ringkasan Pembebanan & Tampilan Hasil Grafis</li><li>Desain Semua (Statis)</li><li>Pemeriksaan/Desain Elemen (Elemen cor di tempat/Cast-in-place) - Hanya Informasi</li><li>Konfigurasi Laporan & Menghasilkan Laporan</li><li>Mendapatkan Gaya Desain Kritis untuk Pemeriksaan Manual Tambahan</li><li>Menutupi Hasil (Enveloping) untuk Kelompok Pracetak dan Cast-in-place</li><li>Pembuatan Gambar Kerja - Hanya untuk Elemen Cast-in-place</li></ul>',
+        '<strong>Integrasi Tekla Tedds & Tahapan Konstruksi</strong><ul><li>Desain Balok dan Kolom Pracetak menggunakan Tedds</li><li>Laporan Perhitungan Kolom/Balok Pracetak menggunakan Tedds</li><li>Menyesuaikan Ukuran Penampang Balok Pracetak dan Memotong Balok Kontinu</li><li>Menerapkan Beban Konstruksi dan Menjalankan Analisis</li><li>Mendesain Ulang Elemen Pracetak pada Tahap Konstruksi menggunakan Tedds</li><li>Perhitungan Desain Elemen Pracetak Lainnya di Tekla Tedds</li><li>Wind Wizard dan Pemodelan/Desain Pondasi</li></ul>'
+      ]
+    },
+    assessment: {
+      en: {
+        intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+        detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+        bullets:[
+          'Upon completion of this course, each learner is entitled to a complimentary one-time Tekla Structural Designer Professional Certification examination.'
+        ]
+      },
+      id: {
+        intro:'Sertifikasi Profesional Tekla menawarkan ujian berbasis kinerja di mana peserta akan diuji sebagian besar pada keterampilan praktis dengan perangkat lunak Tekla.',
+        detail:'Melalui sistem ini, peserta dapat diukur secara akurat berdasarkan keterampilan aplikasi daripada pengetahuan teoritis.',
+        bullets:[
+          'Setelah menyelesaikan kursus ini, setiap peserta berhak mengikuti satu kali ujian Sertifikasi Profesional Tekla Structural Designer secara gratis.'
+        ]
+      }
     }
   },
 
   /* ---- Tekla Tedds ---- */
   { id:'tedds-fundamental', category:'tekla-tedds', placeholder:true,
-    title:'Tekla Tedds — Fundamental Training', eyebrow:'Tekla Tedds',
-    skillLevel:'Fundamental', duration:'TBD', method:'TBD' },
+    availableIn: ['en'],
+    eyebrow:'Tekla Tedds',
+    title: {
+      en: 'Tekla Tedds — Fundamental Training',
+      id: 'Tekla Tedds — Pelatihan Dasar'
+    },
+    skillLevel: { en: 'Fundamental', id: 'Tingkat Dasar' },
+    duration: { en: 'TBD', id: 'Akan Ditentukan' }, 
+    method: { en: 'TBD', id: 'Akan Ditentukan' } 
+  },
 ];
 
+
+// ============================================================================
+// LANGUAGE SWITCHING LOGIC
+// ============================================================================
+
+function toggleLangDropdown(e) {
+  if (e) e.stopPropagation();
+  const dropdown = document.getElementById('langDropdown');
+  dropdown.classList.toggle('active');
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e) {
+  const dropdown = document.getElementById('langDropdown');
+  const btn = document.querySelector('.lang-selector-btn');
+  if (dropdown && dropdown.classList.contains('active') && !btn.contains(e.target) && !dropdown.contains(e.target)) {
+    dropdown.classList.remove('active');
+  }
+});
+
+function updateLanguageUI() {
+  const t = TRANSLATIONS[currentLang];
+  
+  // Header
+  document.documentElement.lang = currentLang;
+  document.getElementById('t-kicker1').innerText = t.kicker1;
+  document.getElementById('t-kicker2').innerText = t.kicker2;
+  document.getElementById('t-title').innerText = t.title;
+  document.getElementById('t-sub').innerText = t.sub;
+  
+  // Update button label
+  const langLabelMap = { 'en': 'MY/SG (English)', 'id': 'Indonesia (Bahasa Indonesia)' };
+  document.getElementById('currentLangLabel').innerText = langLabelMap[currentLang];
+
+  // Form Labels & Placeholders
+  document.getElementById('t-m-title').innerText = t.mTitle;
+  document.getElementById('t-m-sub').innerText = t.mSub;
+  document.getElementById('t-m-l-course').innerText = t.mlCourse;
+  document.getElementById('t-m-l-name').innerText = t.mlName;
+  document.getElementById('m_name').placeholder = t.mPlaceholderName;
+  document.getElementById('t-m-l-email').innerText = t.mlEmail;
+  document.getElementById('m_email').placeholder = t.mPlaceholderEmail;
+  document.getElementById('t-m-l-job').innerText = t.mlJob;
+  document.getElementById('m_job').placeholder = t.mPlaceholderJob;
+  document.getElementById('t-m-l-phone').innerText = t.mlPhone;
+  document.getElementById('m_phone').placeholder = t.mPlaceholderPhone;
+  document.getElementById('t-m-l-company').innerText = t.mlCompany;
+  document.getElementById('m_company').placeholder = t.mPlaceholderCompany;
+  document.getElementById('t-m-l-country').innerText = t.mlCountry;
+  document.getElementById('t-m-l-remarks').innerText = t.mlRemarks;
+  document.getElementById('m_remarks').placeholder = t.mPlaceholderRemarks;
+  
+  document.getElementById('t-m-btn-cancel').innerText = t.btnCancel;
+  const submitBtn = document.getElementById('submitBtn');
+  if(!submitBtn.disabled) submitBtn.innerText = t.btnSubmit; // Only update if not currently submitting
+  
+  // Form Country Dropdown
+  const countrySelect = document.getElementById('m_country');
+  const currentVal = countrySelect.value;
+  countrySelect.innerHTML = t.countryOptions.map(opt => `<option value="${opt.val}">${opt.text}</option>`).join('');
+  if (currentVal) countrySelect.value = currentVal;
+  
+  // Success Message
+  document.getElementById('t-m-s-title').innerText = t.msTitle;
+  document.getElementById('t-m-s-sub').innerText = t.msSub;
+  document.getElementById('t-m-s-btn').innerText = t.msBtn;
+  
+  // Footer
+  document.getElementById('t-f-copyright').innerText = t.fCopyright;
+  document.getElementById('t-f-questions').innerHTML = t.fQuestions;
+  
+  // Re-render tabs and courses
+  initTabs();
+}
+
+function setLanguage(lang) {
+  if (lang === 'th') return; // Not implemented yet
+  currentLang = lang;
+  
+  // Update dropdown styling
+  document.querySelectorAll('.lang-option').forEach(el => el.classList.remove('selected'));
+  event.target.classList.add('selected');
+  document.getElementById('langDropdown').classList.remove('active');
+  
+  updateLanguageUI();
+}
+
+
+// ============================================================================
+// MODAL & FORM LOGIC
+// ============================================================================
 function openModal(courseTitle) {
   const modal = document.getElementById('regModal');
   const courseInput = document.getElementById('m_course');
@@ -1235,10 +2079,12 @@ function closeModal() {
 }
 
 function handleModalSubmit(event) {
-  event.preventDefault(); // Prevent standard page reload
+  event.preventDefault();
   
   const submitBtn = document.getElementById('submitBtn');
-  submitBtn.innerText = 'Submitting...'; // Provide UI feedback
+  const t = TRANSLATIONS[currentLang];
+  
+  submitBtn.innerText = t.btnSubmitting;
   submitBtn.disabled = true;
   
   // Gather data
@@ -1254,7 +2100,7 @@ function handleModalSubmit(event) {
   function showSuccess() {
     document.getElementById('modalFormView').style.display = 'none';
     document.getElementById('modalSuccessView').style.display = 'block';
-    submitBtn.innerText = 'Submit Registration';
+    submitBtn.innerText = t.btnSubmit;
     submitBtn.disabled = false;
     event.target.reset(); // clear form inputs for next time
   }
@@ -1271,7 +2117,6 @@ function handleModalSubmit(event) {
       if (GOOGLE_FORM_ENTRIES.country)    formData.append(GOOGLE_FORM_ENTRIES.country, country);
       if (GOOGLE_FORM_ENTRIES.remarks)    formData.append(GOOGLE_FORM_ENTRIES.remarks, remarks);
 
-      // Perform background submission using standard Promises
       if (window.fetch) {
         fetch(GOOGLE_FORM_ACTION_URL, {
           method: 'POST',
@@ -1283,7 +2128,7 @@ function handleModalSubmit(event) {
         })
         .catch(function(err) {
           console.warn("Background submission error:", err);
-          showSuccess(); // Google blocks some readbacks but still accepts data, show success anyway.
+          showSuccess();
         });
       } else {
         showSuccess();
@@ -1293,85 +2138,119 @@ function handleModalSubmit(event) {
       showSuccess();
     }
   } else {
-    // If no real URL is set, just simulate a brief loading time for testing the UI
     setTimeout(showSuccess, 800);
   }
 }
 
+// ============================================================================
+// RENDER LOGIC
+// ============================================================================
 function badgeHTML(course){
+  const sLvl = course.skillLevel ? course.skillLevel[currentLang] : TRANSLATIONS[currentLang].uiTBD;
+  const sDur = course.duration ? course.duration[currentLang] : TRANSLATIONS[currentLang].uiTBD;
+  const sMeth= course.method ? course.method[currentLang] : TRANSLATIONS[currentLang].uiTBD;
   return `
-    <span class="badge">${course.skillLevel || 'TBD'}</span>
-    <span class="badge">${course.duration || 'TBD'}</span>
-    <span class="badge">${course.method || 'TBD'}</span>
+    <span class="badge">${sLvl}</span>
+    <span class="badge">${sDur}</span>
+    <span class="badge">${sMeth}</span>
   `;
 }
 
 function fullBodyHTML(c){
+  const t = TRANSLATIONS[currentLang];
+  const l = c.lede ? c.lede[currentLang] : '';
+  const cNote = c.contactNote ? c.contactNote[currentLang] : '';
+  const sLvl = c.skillLevel ? c.skillLevel[currentLang] : t.uiTBD;
+  const sMeth= c.method ? c.method[currentLang] : t.uiTBD;
+  const sDur = c.duration ? c.duration[currentLang] : t.uiTBD;
+  const pre = c.prerequisite ? c.prerequisite[currentLang] : '';
+  
+  let topicsHtml = '';
+  if(c.topics && c.topics[currentLang]){
+      topicsHtml = `<div class="block"><h4>${t.lblTopics}</h4><ul>${c.topics[currentLang].map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+  }
+  let outHtml = '';
+  if(c.outcomes && c.outcomes[currentLang]){
+      outHtml = `<div class="block"><h4>${t.lblOutcomes}</h4><ul>${c.outcomes[currentLang].map(x=>`<li>${x}</li>`).join('')}</ul></div>`;
+  }
+  let agendaHtml = '';
+  if(c.agenda && c.agenda[currentLang]){
+      agendaHtml = `
+      <div class="block" style="grid-column: 1 / -1; margin-top: 10px; margin-bottom: 22px;">
+        <h4>${t.lblAgenda}</h4>
+        <div class="agenda-grid">
+          ${c.agenda[currentLang].map((day) => `<div class="agenda-card">${day}</div>`).join('')}
+        </div>
+      </div>`;
+  }
+  let assessHtml = '';
+  if(c.assessment && c.assessment[currentLang]){
+      const a = c.assessment[currentLang];
+      assessHtml = `
+      <div class="assess-box">
+        <h4>${t.lblAssessment}</h4>
+        <p>${a.intro}</p>
+        <p>${a.detail}</p>
+        <ul style="margin:0 0 4px;padding-left:18px;font-size:13.5px;color:var(--ink)">
+          ${a.bullets.map(b=>`<li style="margin-bottom:6px">${b}</li>`).join('')}
+        </ul>
+      </div>`;
+  }
+  
+  const cTitle = c.title[currentLang].replace(/'/g, "\\'");
+
   return `
     <div class="body-badges-mobile">${badgeHTML(c)}</div>
-    <p class="lede">${c.lede || ''}</p>
-    ${c.contactNote ? `<div class="contact-note">${c.contactNote}</div>` : ''}
+    <p class="lede">${l}</p>
+    ${cNote ? `<div class="contact-note">${cNote}</div>` : ''}
 
     <div class="spec-strip">
-      <div class="spec-cell"><div class="k">Skill Level</div><div class="v">${c.skillLevel}</div></div>
-      <div class="spec-cell"><div class="k">Training Method</div><div class="v">${c.method}</div></div>
-      <div class="spec-cell"><div class="k">Duration</div><div class="v">${c.duration}</div></div>
-      ${c.prerequisite ? `<div class="spec-cell" style="grid-column: 1 / -1;"><div class="k">Pre-requisite</div><div class="v pr-list" style="font-size:14px; font-weight:600; color:var(--ink);">${c.prerequisite}</div></div>` : ''}
+      <div class="spec-cell"><div class="k">${t.lblSkillLevel}</div><div class="v">${sLvl}</div></div>
+      <div class="spec-cell"><div class="k">${t.lblMethod}</div><div class="v">${sMeth}</div></div>
+      <div class="spec-cell"><div class="k">${t.lblDuration}</div><div class="v">${sDur}</div></div>
+      ${pre ? `<div class="spec-cell" style="grid-column: 1 / -1;"><div class="k">${t.lblPrereq}</div><div class="v pr-list" style="font-size:14px; font-weight:600; color:var(--ink);">${pre}</div></div>` : ''}
     </div>
 
     <div class="two-col">
-      ${c.topics ? `<div class="block"><h4>Key Learning Topics</h4><ul>${c.topics.map(t=>`<li>${t}</li>`).join('')}</ul></div>` : ''}
-      ${c.outcomes ? `<div class="block"><h4>Learning Outcomes</h4><ul>${c.outcomes.map(t=>`<li>${t}</li>`).join('')}</ul></div>` : ''}
+      ${topicsHtml}
+      ${outHtml}
     </div>
 
-    ${c.agenda ? `
-    <div class="block" style="grid-column: 1 / -1; margin-top: 10px; margin-bottom: 22px;">
-      <h4>Course Agenda</h4>
-      <div class="agenda-grid">
-        ${c.agenda.map((day) => `<div class="agenda-card">${day}</div>`).join('')}
-      </div>
-    </div>
-    ` : ''}
-
-    ${c.assessment ? `
-    <div class="assess-box">
-      <h4>Assessment &amp; Certification</h4>
-      <p>${c.assessment.intro}</p>
-      <p>${c.assessment.detail}</p>
-      <ul style="margin:0 0 4px;padding-left:18px;font-size:13.5px;color:var(--ink)">
-        ${c.assessment.bullets.map(b=>`<li style="margin-bottom:6px">${b}</li>`).join('')}
-      </ul>
-    </div>` : ''}
+    ${agendaHtml}
+    ${assessHtml}
 
     <div class="cta-row">
-      <button type="button" class="register-btn" onclick="openModal('${c.title.replace(/'/g, "\\'")}')">Register interest →</button>
-      <span class="cta-hint">Opens a quick registration form — no commitment required.</span>
+      <button type="button" class="register-btn" onclick="openModal('${cTitle}')">${t.lblRegister}</button>
+      <span class="cta-hint">${t.lblCtaHint}</span>
     </div>
   `;
 }
 
 function placeholderBodyHTML(c){
+  const t = TRANSLATIONS[currentLang];
+  const cTitle = c.title[currentLang].replace(/'/g, "\\'");
   return `
     <div class="body-badges-mobile">${badgeHTML(c)}</div>
     <div class="placeholder-body">
-      Full syllabus details for this course are being finalised. In the meantime, register
-      your interest below and the SEA training team will follow up with dates and pricing.
+      ${t.lblPlaceholderBody}
     </div>
     <div class="cta-row">
-      <button type="button" class="register-btn" onclick="openModal('${c.title.replace(/'/g, "\\'")}')">Register interest →</button>
-      <span class="cta-hint">Opens a quick registration form — no commitment required.</span>
+      <button type="button" class="register-btn" onclick="openModal('${cTitle}')">${t.lblRegister}</button>
+      <span class="cta-hint">${t.lblCtaHint}</span>
     </div>
   `;
 }
 
 function courseCardHTML(c){
+  const t = TRANSLATIONS[currentLang];
+  const title = c.title[currentLang];
   return `
     <div class="course-card${c.featured?' featured':''}" data-id="${c.id}" data-category="${c.category}">
       <div class="course-head" onclick="toggleCard('${c.id}')">
         <div class="chevron"><svg width="12" height="12" viewBox="0 0 12 12"><line x1="6" y1="0" x2="6" y2="12" stroke-width="1.6"/><line x1="0" y1="6" x2="12" y2="6" stroke-width="1.6"/></svg></div>
         <div class="course-head-main">
-          <div class="course-eyebrow">${c.eyebrow}${c.placeholder ? '<span class="placeholder-tag">Details coming soon</span>' : ''}</div>
-          <div class="course-title">${c.title}</div>
+          <div class="course-eyebrow">${c.eyebrow}${c.placeholder ? `<span class="placeholder-tag">${t.lblPlaceholderTag}</span>` : ''}</div>
+          <div class="course-title">${title}</div>
         </div>
         <div class="badge-row">${badgeHTML(c)}</div>
       </div>
@@ -1384,21 +2263,33 @@ function courseCardHTML(c){
   `;
 }
 
+// Track active tab state globally so re-renders preserve it
+let activeTabId = 'all';
+
 function render(activeCategory){
   const list = document.getElementById('courseList');
   const groups = CATEGORIES.filter(cat => cat.id !== 'all');
+  const t = TRANSLATIONS[currentLang];
   let html = '';
 
   groups.forEach(cat=>{
-    const items = COURSES.filter(c => c.category === cat.id);
+    // Filter by Category AND check if course is available in current region/language
+    const items = COURSES.filter(c => 
+      c.category === cat.id && 
+      (!c.availableIn || c.availableIn.includes(currentLang))
+    );
+
     if(!items.length) return;
     if(activeCategory !== 'all' && activeCategory !== cat.id) return;
 
-    html += `<div class="category-heading"><h2>${cat.label}</h2><span class="cat-note">${items.length} course${items.length>1?'s':''}</span></div>`;
+    const catLabel = cat.label[currentLang];
+    const countStr = items.length > 1 ? t.uiCourseCount : t.uiCourseCount1;
+    
+    html += `<div class="category-heading"><h2>${catLabel}</h2><span class="cat-note">${items.length} ${countStr}</span></div>`;
     html += items.map(courseCardHTML).join('');
   });
 
-  list.innerHTML = html || `<div class="no-results">No courses in this category yet.</div>`;
+  list.innerHTML = html || `<div class="no-results">${t.uiNoResults}</div>`;
 }
 
 function toggleCard(id){
@@ -1426,20 +2317,36 @@ function toggleCard(id){
 function initTabs(){
   const bar = document.getElementById('tabBar');
   bar.innerHTML = CATEGORIES.map((cat,i)=>{
-    const count = cat.id === 'all' ? COURSES.length : COURSES.filter(c=>c.category===cat.id).length;
-    return `<button class="tab-btn${i===0?' active':''}" data-cat="${cat.id}" onclick="selectTab('${cat.id}', this)">${cat.label}<span class="count">${count}</span></button>`;
+    // Count only courses available in the current region/language
+    const items = COURSES.filter(c => 
+      (cat.id === 'all' || c.category === cat.id) && 
+      (!c.availableIn || c.availableIn.includes(currentLang))
+    );
+    const count = items.length;
+    
+    // Hide empty category tabs (except 'all')
+    if (cat.id !== 'all' && count === 0) return '';
+
+    const catLabel = cat.label[currentLang];
+    const isActive = cat.id === activeTabId ? ' active' : '';
+    return `<button class="tab-btn${isActive}" data-cat="${cat.id}" onclick="selectTab('${cat.id}')">${catLabel}<span class="count">${count}</span></button>`;
   }).join('');
-  render('all');
+  
+  render(activeTabId);
 }
 
-function selectTab(catId, btn){
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+function selectTab(catId){
+  activeTabId = catId;
+  document.querySelectorAll('.tab-btn').forEach(b=>{
+      if(b.getAttribute('data-cat') === catId) b.classList.add('active');
+      else b.classList.remove('active');
+  });
   render(catId);
 }
 
-// Start rendering
-initTabs();
+// Start app
+updateLanguageUI(); // initializes UI elements with default lang ('en')
+
 </script>
 
 </body>
