@@ -74,7 +74,6 @@
     display: block;
   }
   
-  /* Language Selector Styles */
   .lang-selector-wrapper {
     position: relative;
   }
@@ -600,6 +599,7 @@
     padding-top: 18px;
     border-top: 1px solid var(--line);
   }
+  
   .btn-primary {
     background: var(--amber);
     color: var(--navy-14);
@@ -703,7 +703,7 @@
       <span class="mono" id="t-kicker2">Southeast Asia</span>
     </div>
     <h1 class="portal-title" id="t-title">SEA Training Portal</h1>
-    <p class="portal-sub" id="t-sub">Instructor-led courses covering Tekla Structures, Tekla Structural Designer, Tekla Tedds, and CORENET X readiness — for teams working across Southeast Asia. Select a course below to view the full syllabus and register your interest.</p>
+    <p class="portal-sub" id="t-sub">Instructor-led courses covering Tekla Structures, Tekla Structural Designer, Tekla Tedds, Trimble Connect, and CORENET X readiness — for teams working across Southeast Asia. Select a course below to view the full syllabus and register your interest.</p>
   </div>
 </header>
 
@@ -806,7 +806,7 @@ const TRANSLATIONS = {
     kicker1: "Trimble Training Services",
     kicker2: "Southeast Asia",
     title: "SEA Training Portal",
-    sub: "Instructor-led courses covering Tekla Structures, Tekla Structural Designer, Tekla Tedds, and CORENET X readiness — for teams working across Southeast Asia. Select a course below to view the full syllabus and register your interest.",
+    sub: "Instructor-led courses covering Tekla Structures, Tekla Structural Designer, Tekla Tedds, Trimble Connect, and CORENET X readiness — for teams working across Southeast Asia. Select a course below to view the full syllabus and register your interest.",
     
     // Modal Form
     mTitle: "Register Interest",
@@ -874,7 +874,7 @@ const TRANSLATIONS = {
     kicker1: "Layanan Pelatihan Trimble",
     kicker2: "Asia Tenggara",
     title: "Portal Pelatihan Indonesia",
-    sub: "Kursus berinstruktur yang mencakup Tekla Structures dan Tekla Structural Designer — untuk pengguna di seluruh Indonesia. Pilih kursus di bawah ini untuk melihat silabus lengkap dan mendaftarkan minat Anda.",
+    sub: "Kursus berinstruktur yang mencakup Tekla Structures, Tekla Structural Designer, dan Trimble Connect — untuk pengguna di seluruh Indonesia. Pilih kursus di bawah ini untuk melihat silabus lengkap dan mendaftarkan minat Anda.",
     
     // Modal Form
     mTitle: "Daftar Minat",
@@ -940,7 +940,6 @@ const TRANSLATIONS = {
   }
 };
 
-
 // ============================================================================
 // DATA SETTINGS (Dual Language)
 // ============================================================================
@@ -956,13 +955,14 @@ const GOOGLE_FORM_ENTRIES = {
   remarks:    "entry.436961943"
 };
 
-// Categories are defined with objects for translations
+// Categories are defined with objects for translations (Added Trimble Connect)
 const CATEGORIES = [
   { id:'all',                       label: { en: 'All Courses', id: 'Semua Kursus' } },
   { id:'corenet-x',                 label: { en: 'CORENET X Readiness', id: 'Kesiapan CORENET X' } },
   { id:'tekla-structures',          label: { en: 'Tekla Structures', id: 'Tekla Structures' } },
   { id:'tekla-structural-designer', label: { en: 'Tekla Structural Designer', id: 'Tekla Structural Designer' } },
   { id:'tekla-tedds',               label: { en: 'Tekla Tedds', id: 'Tekla Tedds' } },
+  { id:'trimble-connect',           label: { en: 'Trimble Connect', id: 'Trimble Connect' } },
 ];
 
 // Courses contain objects mapping 'en' and 'id' for translatable fields
@@ -1962,6 +1962,169 @@ const COURSES = [
     duration: { en: 'TBD', id: 'Akan Ditentukan' }, 
     method: { en: 'TBD', id: 'Akan Ditentukan' } 
   },
+
+  /* ---- Trimble Connect ---- */
+  {
+    id:'tc-fundamental',
+    category:'trimble-connect',
+    eyebrow:'Trimble Connect',
+    title: {
+      en: 'Trimble Connect — Fundamental Training',
+      id: 'Trimble Connect — Pelatihan Dasar'
+    },
+    skillLevel: { en: 'Fundamental', id: 'Tingkat Dasar' },
+    duration: { en: '2 half-days (online) or 1 full day (classroom)', id: '2 setengah hari (online) atau 1 hari penuh (kelas)' },
+    method: { en: 'Online (via Zoom) or Classroom', id: 'Online (via Zoom) atau Tatap Muka (Kelas)' },
+    lede: {
+      en: 'This instructor-led training course is open to Tekla Structures and Trimble Connect users based in Malaysia and Singapore. Conducted in English, this 1-day Trimble Connect Fundamental training course introduces learners to the core functionalities of Trimble Connect, focusing on real-world workflows for model collaboration, issue tracking, and project coordination.<br><br>Learners will gain hands-on experience using Trimble Connect alongside Tekla Structures to effectively manage models, views, tasks, and documents.',
+      id: 'Kursus pelatihan berinstruktur ini terbuka untuk pengguna Tekla Structures dan Trimble Connect yang berbasis di Indonesia. Dibawakan dalam Bahasa Indonesia, pelatihan Dasar Trimble Connect selama 1 hari ini memperkenalkan fungsi inti Trimble Connect, berfokus pada alur kerja nyata untuk kolaborasi model, pelacakan masalah, dan koordinasi proyek.<br><br>Peserta akan mendapatkan pengalaman langsung menggunakan Trimble Connect bersama Tekla Structures untuk mengelola model, tampilan, tugas, dan dokumen secara efektif.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        'Introduction to Trimble Connect - Overview of Trimble Connect and its benefits.',
+        'Project Management - Creating and managing Trimble Connect projects.',
+        'Model Integration - Uploading and linking Tekla Structures models.',
+        'Visualization Tools - Creating and managing 3D/2D Views, Comments, and Tags.',
+        'Issue Tracking - Assigning, tracking, and resolving issues using BCF Topics.',
+        'File Management - Uploading, organizing, and sharing project files efficiently.',
+        'Team Collaboration - Managing teams, permissions, and releases.'
+      ],
+      id: [
+        'Pengenalan Trimble Connect - Gambaran umum Trimble Connect dan manfaatnya.',
+        'Manajemen Proyek - Membuat dan mengelola proyek Trimble Connect.',
+        'Integrasi Model - Mengunggah dan menautkan model Tekla Structures.',
+        'Alat Visualisasi - Membuat dan mengelola Tampilan 3D/2D, Komentar, dan Tag.',
+        'Pelacakan Masalah - Menetapkan, melacak, dan menyelesaikan masalah menggunakan Topik BCF.',
+        'Manajemen File - Mengunggah, mengatur, dan berbagi file proyek secara efisien.',
+        'Kolaborasi Tim - Mengelola tim, izin, dan rilis.'
+      ]
+    },
+    outcomes: {
+      en: [
+        'Understand and utilize the core functionalities of Trimble Connect.',
+        'Efficiently manage projects and collaborate with team members.',
+        'Enhance their skills in model integration and issue tracking.',
+        'Improve their ability to organize and share project files.',
+        'Be prepared to use Trimble Connect for effective project coordination.'
+      ],
+      id: [
+        'Memahami dan memanfaatkan fungsionalitas inti Trimble Connect.',
+        'Mengelola proyek secara efisien dan berkolaborasi dengan anggota tim.',
+        'Meningkatkan keterampilan dalam integrasi model dan pelacakan masalah.',
+        'Meningkatkan kemampuan untuk mengatur dan berbagi file proyek.',
+        'Siap menggunakan Trimble Connect untuk koordinasi proyek yang efektif.'
+      ]
+    },
+    assessment: {
+      en: {
+        intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+        detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+        bullets:[
+          'Upon completion of this course, each learner is entitled to a complimentary one-time Trimble Connect Professional Certification examination.'
+        ]
+      },
+      id: {
+        intro:'Sertifikasi Profesional Tekla menawarkan ujian berbasis kinerja di mana peserta akan diuji sebagian besar pada keterampilan praktis dengan perangkat lunak Tekla.',
+        detail:'Melalui sistem ini, peserta dapat diukur secara akurat berdasarkan keterampilan aplikasi daripada pengetahuan teoritis.',
+        bullets:[
+          'Setelah menyelesaikan kursus ini, setiap peserta berhak mengikuti satu kali ujian Sertifikasi Profesional Trimble Connect secara gratis.'
+        ]
+      }
+    }
+  },
+  {
+    id:'tc-statusphere',
+    availableIn: ['en'], // Open to users based in Malaysia and Singapore only
+    category:'trimble-connect',
+    eyebrow:'Trimble Connect',
+    title: {
+      en: 'Trimble Connect: Statusphere Training',
+      id: 'Trimble Connect: Pelatihan Statusphere'
+    },
+    skillLevel: { en: 'Fundamental', id: 'Tingkat Dasar' },
+    duration: { en: '1 day (9:00am to 5:00pm)', id: '1 hari (09:00 - 17:00)' },
+    method: { en: 'Online (via Zoom) or Classroom', id: 'Online (via Zoom) atau Tatap Muka (Kelas)' },
+    lede: {
+      en: 'This instructor-led training course is open to Trimble Connect and Statusphere users based in Malaysia and Singapore. Conducted in English, this 1-day Trimble Connect: Statusphere Training course introduces learners to the core functionalities of the Statusphere extension suite, with a focus on real-world workflows for tracking, configuring, and monitoring construction progress directly within Trimble Connect.<br><br>Learners will gain hands-on experience with Statusphere: Insight, Manage, Scan, and Sync, alongside Trimble Connect, to effectively prepare model data, configure tracking workflows, capture field progress, and reuse status data.',
+      id: 'Kursus pelatihan berinstruktur ini terbuka untuk pengguna Trimble Connect dan Statusphere yang berbasis di Malaysia dan Singapura. Dibawakan dalam Bahasa Inggris, pelatihan ini memperkenalkan fungsionalitas inti dari suite ekstensi Statusphere.<br><br>Peserta akan mendapatkan pengalaman langsung dengan Statusphere: Insight, Manage, Scan, dan Sync, bersama dengan Trimble Connect, untuk memantau kemajuan konstruksi secara efektif.'
+    },
+    contactNote: {
+      en: 'If you are interested in attending this course and have not yet purchased it, please email <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> to request a quotation.',
+      id: 'Jika Anda tertarik untuk mengikuti kursus ini, silakan kirim email ke <a href="mailto:tekla.training.sea@trimble.com">tekla.training.sea@trimble.com</a> untuk meminta penawaran harga.'
+    },
+    topics: {
+      en: [
+        'Statusphere Overview & Access – Understanding the purpose of the four modules (Insight, Manage, Scan, and Sync), along with licensing, registration, and email-domain restrictions.',
+        'Model Data Preparation – Preparing model objects and Trimble Connect Property Sets for grouping, filtering, planned dates, and QR labels.',
+        'Configuring Statusphere Manage – Defining the project status workflow, creating Status Actions, and setting up QR label templates.',
+        'QR Code Generation – Generating and exporting QR codes for selected model elements in PDF, Excel, or JPG formats.',
+        'Configuring Statusphere Insight – Building Report Configs, Report Settings, and Report Profiles for visual progress dashboards.',
+        'Field Progress Capture (Scan) – Scanning QR codes online and offline, managing cached projects, and understanding local storage risks.',
+        'Bulk Updates with CSV – Utilizing the CSV template for bulk progress updates, applying ISO date/time formats, and interpreting errors.',
+        'Monitoring & Reusing Status Data – Visualizing status in Trimble Connect, synchronizing updates to Property Sets, and utilizing the Data Table and Organizer for advanced reporting.'
+      ],
+      id: [
+        'Ikhtisar & Akses Statusphere – Memahami tujuan keempat modul, lisensi, registrasi, dan batasan domain email.',
+        'Persiapan Data Model – Menyiapkan objek model dan Set Properti Trimble Connect untuk pelabelan QR.',
+        'Mengonfigurasi Statusphere Manage – Menentukan alur kerja status proyek dan membuat Tindakan Status.',
+        'Pembuatan Kode QR – Membuat dan mengekspor kode QR untuk elemen model terpilih.',
+        'Mengonfigurasi Statusphere Insight – Membangun dasbor kemajuan visual.',
+        'Tangkapan Kemajuan Lapangan (Scan) – Memindai kode QR online dan offline serta mengelola proyek.',
+        'Pembaruan Massal dengan CSV – Memanfaatkan templat CSV untuk pembaruan kemajuan massal.',
+        'Pemantauan & Penggunaan Kembali Data Status – Memvisualisasikan status di Trimble Connect dan menyinkronkan pembaruan.'
+      ]
+    },
+    outcomes: {
+      en: [
+        'Explain the Statusphere modules and identify which module supports each project workflow.',
+        'Confirm Trimble Connect project membership, browser, and license prerequisites.',
+        'Register Statusphere modules in a Trimble Connect project.',
+        'Prepare model data and Trimble Connect Property Sets for grouping, filtering, planned dates, and QR labels.',
+        'Create and manage Status Actions while applying email-domain and privacy rules.',
+        'Create QR label templates and generate QR codes for selected model elements.',
+        'Build Report Configs, Settings, and Profiles for dashboard reporting and export them to other users.',
+        'Capture progress via QR codes online and offline, and understand offline synchronization and local storage risks.',
+        'Perform bulk updates using the CSV template and interpret rejected rows.',
+        'Monitor progress through the Statusphere Dashboard and Trimble Connect Status Sharing.',
+        'Synchronize status data to Trimble Connect Property Sets.',
+        'Use Trimble Connect Data Table and Organizer to filter, group, visualize, and export status information.'
+      ],
+      id: [
+        'Menjelaskan modul Statusphere dan mengidentifikasi modul mana yang mendukung setiap alur kerja.',
+        'Mengonfirmasi keanggotaan proyek Trimble Connect dan prasyarat lisensi.',
+        'Mendaftarkan modul Statusphere dalam proyek Trimble Connect.',
+        'Menyiapkan data model untuk pengelompokan dan label QR.',
+        'Membuat dan mengelola Tindakan Status dan aturan privasi.',
+        'Membuat templat label QR dan menghasilkan kode QR.',
+        'Membangun Konfigurasi Laporan untuk pelaporan dasbor.',
+        'Menangkap kemajuan melalui kode QR secara online dan offline.',
+        'Melakukan pembaruan massal menggunakan templat CSV.',
+        'Memantau kemajuan melalui Dasbor Statusphere.',
+        'Menyinkronkan data status ke Set Properti Trimble Connect.',
+        'Menggunakan Tabel Data Trimble Connect dan Organizer untuk mengekspor informasi status.'
+      ]
+    },
+    assessment: {
+      en: {
+        intro:'Tekla\'s Professional Certification offers performance-based exams where participants will be tested mostly on hands-on skills with Tekla software.',
+        detail:'Through this system, participants can be accurately measured against the application skills rather than theoretical knowledge.',
+        bullets:[
+          'Upon completion of this course, each learner is entitled to a complimentary one-time Trimble Connect Professional Certification examination.'
+        ]
+      },
+      id: {
+        intro:'Sertifikasi Profesional Tekla menawarkan ujian berbasis kinerja di mana peserta akan diuji sebagian besar pada keterampilan praktis dengan perangkat lunak Tekla.',
+        detail:'Melalui sistem ini, peserta dapat diukur secara akurat berdasarkan keterampilan aplikasi daripada pengetahuan teoritis.',
+        bullets:[
+          'Setelah menyelesaikan kursus ini, setiap peserta berhak mengikuti satu kali ujian Sertifikasi Profesional Trimble Connect secara gratis.'
+        ]
+      }
+    }
+  }
 ];
 
 
